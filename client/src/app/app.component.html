@@ -1,0 +1,17 @@
+<div>
+  <div class="p-grid">
+    <div class="p-col-1"></div>
+    <div class="p-col-10">
+      <p-tabMenu [model]="items" [activeItem]="activeItem"></p-tabMenu>
+    </div>
+    <div class="p-col-1"></div>
+  </div>
+
+  <div class="p-grid">
+    <div class="p-col-1"></div>
+    <div class="p-col-10">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="p-col-1"></div>
+  </div>
+</div>
