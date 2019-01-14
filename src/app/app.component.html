@@ -1,0 +1,19 @@
+<div class="ui-g">
+  <div class="ui-g-12">
+
+    <header>
+      <p-tabMenu [model]="items" [activeItem]="activeItem"></p-tabMenu>
+    </header>
+
+    <div class="container-fluid">
+      <router-outlet></router-outlet>
+    </div>
+
+    <footer class="main-footer">
+      Copyright &copy; HiLo 2018 <a href [routerLink]="['/about']">About</a>
+    </footer>
+  </div>
+
+
+
+</div>
