@@ -1,14 +1,9 @@
-footer.main-footer {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  height: 30px;
-  line-height: 30px;
-  background-color: #fff;
-  border-color: #eeeeee;
-  border-width: 1px 0 0 0;
-  border-style: solid;
-  text-align: center;
-  font-size: 85%;
-  left: 0px;
+.read-only-area {
+  background: transparent;
+  border: 0px;
+}
+
+.details-fieldset > fieldset {
+  margin-left: 0;
+  margin-right: 0;
 }

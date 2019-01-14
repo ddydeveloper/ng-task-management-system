@@ -8,6 +8,7 @@ import { ToastModule } from "primeng/toast";
 import { MessageService } from "primeng/api";
 import { PanelModule } from "primeng/panel";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { FieldsetModule } from "primeng/fieldset";
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     MessagesModule,
     MessageModule,
     ToastModule,
-    PanelModule
+    PanelModule,
+    FieldsetModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -28,7 +30,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     MessagesModule,
     MessageModule,
     ToastModule,
-    PanelModule
+    PanelModule,
+    FieldsetModule
   ],
   providers: [MessageService]
 })
