@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import TaskModel from "../_models/task.model";
 import { TasksApi } from "../_services/tasks.api";
-import { interval } from "rxjs/observable/interval";
+import { interval } from "rxjs";
 
 @Component({
   selector: "app-tasks-list",
