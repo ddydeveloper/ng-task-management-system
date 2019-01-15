@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  seq:
+    image: 'datalust/seq:latest'
+    container_name: seq
+    ports:
+      - 5343:5342
+  db:
+    build:
+      dockerfile: Dockerfile.stage
+      context: ./database
+    ports:
+      - 1434:1433
+  client:
+    build:
+      dockerfile: Dockerfile.stage
+      context: ./client
+    container_name: client
+    depends_on:
+      - api
+    args:
+      env: staging
+    ports:
+      - 5000:3000
+  api:
+    build:
+      dockerfile: Dockerfile.stage
+      context: ./api
+    container_name: api
+    depends_on:
+        - db
+        - seq
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+    ports:
+      - 8001:8080
+      
