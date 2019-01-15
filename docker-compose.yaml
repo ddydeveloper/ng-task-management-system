@@ -24,9 +24,9 @@ services:
     build:
       dockerfile: Dockerfile.stage
       context: ./client
-      args:
-        env: stage
     container_name: client
+    environment:
+      - API_URL=api;
     ports:
       - "3000:3000"
     depends_on:
@@ -46,4 +46,3 @@ services:
     depends_on:
       - db
       - seq
-      
