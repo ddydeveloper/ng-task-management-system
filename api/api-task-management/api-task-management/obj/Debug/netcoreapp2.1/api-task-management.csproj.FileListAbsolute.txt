@@ -12,3 +12,17 @@ C:\Users\mi\Documents\GitHub\ng-task-management-system\api\api-task-management\a
 C:\Users\mi\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.RazorTargetAssemblyInfo.cache
 C:\Users\mi\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.dll
 C:\Users\mi\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.pdb
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.csprojAssemblyReference.cache
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.csproj.CoreCompileInputs.cache
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.RazorAssemblyInfo.cache
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.RazorAssemblyInfo.cs
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.AssemblyInfoInputs.cache
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.AssemblyInfo.cs
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\bin\Debug\netcoreapp2.1\api-task-management.deps.json
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\bin\Debug\netcoreapp2.1\api-task-management.runtimeconfig.json
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\bin\Debug\netcoreapp2.1\api-task-management.runtimeconfig.dev.json
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\bin\Debug\netcoreapp2.1\api-task-management.dll
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\bin\Debug\netcoreapp2.1\api-task-management.pdb
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.RazorTargetAssemblyInfo.cache
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.dll
+C:\Users\d.doronkin\Documents\GitHub\ng-task-management-system\api\api-task-management\api-task-management\obj\Debug\netcoreapp2.1\api-task-management.pdb

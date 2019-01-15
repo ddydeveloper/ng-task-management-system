@@ -2,37 +2,48 @@ version: '3'
 
 services:
   seq:
-    image: 'datalust/seq:latest'
+    restart: always      
+    image: datalust/seq:latest
     container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
     ports:
-      - 5343:5342
+      - "5341:5341"
+      - "8005:80"
   db:
+    restart: always
+    image: task-management/db
     build:
       dockerfile: Dockerfile.stage
       context: ./database
     ports:
-      - 1434:1433
+      - "1434:1433"
   client:
+    restart: always
+    image: task-management/client
     build:
       dockerfile: Dockerfile.stage
       context: ./client
+      args:
+        env: stage
     container_name: client
+    ports:
+      - "3000:3000"
     depends_on:
       - api
-    args:
-      env: staging
-    ports:
-      - 5000:3000
   api:
+    restart: always
+    image: task-management/api
     build:
       dockerfile: Dockerfile.stage
       context: ./api
     container_name: api
-    depends_on:
-        - db
-        - seq
     environment:
-      - ASPNETCORE_ENVIRONMENT=Staging
+      - ConnectionStrings__TasksDb=Server=db;DataBase=Tasks;User Id=sa;Password=P@ssw0rd;Connection Timeout=30;
+      - Seq=http://seq/
     ports:
-      - 8001:8080
+      - "8001:80"
+    depends_on:
+      - db
+      - seq
       

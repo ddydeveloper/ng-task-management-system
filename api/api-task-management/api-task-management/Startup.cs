@@ -1,4 +1,5 @@
 ﻿using System;
+using api_task_management.Services;
 using MedicalApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -16,16 +18,20 @@ namespace api_task_management
     {
         public Startup(IConfiguration configuration)
         {
+            var sew = configuration.GetSection("Seq").Value;
+
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Warning()
+                .MinimumLevel.Information()
                 .WriteTo.File($"{AppContext.BaseDirectory}/Logs/log-.txt", rollingInterval: RollingInterval.Day)
-                .WriteTo.Seq(configuration.GetConnectionString("Seq"))
+                .WriteTo.Seq(configuration.GetSection("Seq").Value)
                 .CreateLogger();
 
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
+
+        private string _tasksConnection;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -66,12 +72,15 @@ namespace api_task_management
                         options.OperationFilter<SwaggerDefaultValues>();
                     });
 
+            _tasksConnection = Configuration.GetConnectionString("TasksDb");
+
             services.Configure<ConnectionStrings>(Configuration.GetSection(nameof(ConnectionStrings)));
+            services.AddScoped<ITasksService, TasksService>();
             services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -96,6 +105,11 @@ namespace api_task_management
                             description.GroupName.ToUpperInvariant());
                     }
                 });
+
+            var logger = loggerFactory.CreateLogger("RequestInfoLogger");
+
+            logger.LogInformation($"TasksDb connection string is: {_tasksConnection}");
+            logger.LogInformation("All services configured");
         }
 
         private static Info CreateInfoForApiVersion(ApiVersionDescription description)

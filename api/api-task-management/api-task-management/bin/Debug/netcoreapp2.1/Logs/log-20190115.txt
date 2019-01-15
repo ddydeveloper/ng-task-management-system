@@ -1,0 +1,40 @@
+2019-01-15 18:16:08.536 +03:00 [INF] User profile is available. Using 'C:\Users\d.doronkin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-01-15 18:16:09.263 +03:00 [INF] TasksDb connection string is: Server=localhost,1434;DataBase=Tasks;User Id=sa;Password=P@ssw0rd;Connection Timeout=30;
+2019-01-15 18:16:09.265 +03:00 [INF] All services configured
+2019-01-15 18:16:09.621 +03:00 [INF] Request starting HTTP/1.1 DEBUG http://localhost:56089/  0
+2019-01-15 18:16:09.621 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/api/values  
+2019-01-15 18:16:09.679 +03:00 [INF] Request finished in 53.901ms 200 
+2019-01-15 18:16:09.791 +03:00 [INF] Request did not specify a service API version, but multiple candidate actions were found. Candidate actions: api_task_management.Controllers.ValuesController.Get (api-task-management)
+api_task_management.Controllers.ValuesController.Post (api-task-management)
+2019-01-15 18:16:09.805 +03:00 [INF] Executing ObjectResult, writing value of type '<>f__AnonymousType1`1[[<>f__AnonymousType2`3[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[<>f__AnonymousType3`1[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], Microsoft.AspNetCore.Mvc.Versioning, Version=2.3.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]], Microsoft.AspNetCore.Mvc.Versioning, Version=2.3.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]'.
+2019-01-15 18:16:09.921 +03:00 [INF] Request finished in 277.5623ms 400 application/json; charset=utf-8
+2019-01-15 18:16:10.090 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/favicon.ico  
+2019-01-15 18:16:10.095 +03:00 [INF] Request finished in 2.9461ms 404 
+2019-01-15 18:16:11.530 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/swagger  
+2019-01-15 18:16:11.535 +03:00 [INF] Request finished in 3.381ms 301 
+2019-01-15 18:16:11.538 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/swagger/index.html  
+2019-01-15 18:16:11.572 +03:00 [INF] Request finished in 33.7245ms 200 text/html
+2019-01-15 18:16:11.664 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/swagger/swagger-ui-standalone-preset.js  
+2019-01-15 18:16:11.666 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/swagger/swagger-ui.css  
+2019-01-15 18:16:11.668 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/swagger/swagger-ui-bundle.js  
+2019-01-15 18:16:11.734 +03:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2019-01-15 18:16:11.739 +03:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2019-01-15 18:16:11.752 +03:00 [INF] Request finished in 98.2587ms 200 application/javascript
+2019-01-15 18:16:11.754 +03:00 [INF] Request finished in 99.6177ms 200 text/css
+2019-01-15 18:16:11.762 +03:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2019-01-15 18:16:11.766 +03:00 [INF] Request finished in 113.7572ms 200 application/javascript
+2019-01-15 18:16:12.027 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/swagger/1.0/swagger.json  
+2019-01-15 18:16:12.067 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/swagger/favicon-32x32.png  
+2019-01-15 18:16:12.084 +03:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2019-01-15 18:16:12.092 +03:00 [INF] Request finished in 26.5122ms 200 image/png
+2019-01-15 18:16:12.095 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/swagger/favicon-16x16.png  
+2019-01-15 18:16:12.114 +03:00 [INF] Sending file. Request path: '/favicon-16x16.png'. Physical path: 'N/A'
+2019-01-15 18:16:12.118 +03:00 [INF] Request finished in 27.4153ms 200 image/png
+2019-01-15 18:16:12.218 +03:00 [INF] Request finished in 187.9096ms 200 application/json;charset=utf-8
+2019-01-15 18:16:18.240 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44372/api/Tasks?status=1&skip=10&take=10  
+2019-01-15 18:16:18.290 +03:00 [INF] Route matched with {action = "GetTasksAsync", controller = "Tasks"}. Executing action api_task_management.Controllers.TasksController.GetTasksAsync (api-task-management)
+2019-01-15 18:16:18.329 +03:00 [INF] Executing action method api_task_management.Controllers.TasksController.GetTasksAsync (api-task-management) with arguments (["1","10","10"]) - Validation state: "Valid"
+2019-01-15 18:16:18.812 +03:00 [INF] Executed action method api_task_management.Controllers.TasksController.GetTasksAsync (api-task-management), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 476.4105ms.
+2019-01-15 18:16:18.824 +03:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[api_task_management.Dtos.TaskDto, api-task-management, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2019-01-15 18:16:18.838 +03:00 [INF] Executed action api_task_management.Controllers.TasksController.GetTasksAsync (api-task-management) in 542.38790000000006ms
+2019-01-15 18:16:18.841 +03:00 [INF] Request finished in 600.8556ms 200 application/json; charset=utf-8
