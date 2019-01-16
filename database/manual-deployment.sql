@@ -16,7 +16,7 @@ CREATE TABLE [dbo].[Statuses]
 INSERT INTO [dbo].[Statuses]([Name])
           SELECT (N'Active')
 UNION ALL SELECT (N'Completed')
-UNION ALL SELECT (N'Expired')
+UNION ALL SELECT (N'Archived')
 
 CREATE TABLE [dbo].[Priorities]
 (
@@ -55,8 +55,8 @@ DECLARE @Idx            INT = 1,
 
 WHILE @Idx >=1 and @Idx <= 100000
 BEGIN
-    SELECT @RandomDate = ROUND(((11 - 1) * RAND()), 0),
-           @RandomStatus = ROUND(((3 - 1) * RAND()), 0),
+    SELECT @RandomDate = ROUND(((21 - 1) * RAND()), 0),
+           @RandomStatus = ROUND(((2 - 1) * RAND()), 0),
            @RandomPriority = ROUND(((6 - 1) * RAND()), 0)
 
     INSERT INTO [dbo].[Tasks] 
@@ -70,15 +70,13 @@ BEGIN
     )
     VALUES (
         N'Test task # ' + CAST(@Idx AS NVARCHAR(6)),
-        N'The following task has ' + CAST(@Idx AS NVARCHAR(6)) + N' number
-follow the complete date to define time to complete
-added ' + CAST(@Added AS NVARCHAR(20)),
+        N'The following task has ' + CAST(@Idx AS NVARCHAR(6)) + N' number follow the complete date to define time to complete added ' + CAST(@Added AS NVARCHAR(20)),
         @Added,
         CASE
-            WHEN @Idx > 1    AND @Idx <= 200   THEN DATEADD(hour,   @RandomDate + @Idx, @Added)
-            WHEN @Idx > 200  AND @Idx <= 1000  THEN DATEADD(minute, @RandomDate + @Idx, @Added)
-            WHEN @Idx > 1000 AND @Idx <= 50000 THEN DATEADD(second, @RandomDate + @Idx, @Added)
-            ELSE DATEADD(millisecond, @RandomDate + @Idx, @Added)
+            WHEN @Idx > 1    AND @Idx <= 200   THEN DATEADD(day,   @RandomDate, @Added)
+            WHEN @Idx > 200  AND @Idx <= 1000  THEN DATEADD(hour, @RandomDate, @Added)
+            WHEN @Idx > 1000 AND @Idx <= 50000 THEN DATEADD(minute, @RandomDate, @Added)
+            ELSE DATEADD(second, @RandomDate, @Added)
         END,
         @RandomPriority,
         @RandomStatus
@@ -97,7 +95,7 @@ AS
 BEGIN
     DECLARE @SQL NVARCHAR(MAX)
 
-    SET @SQL = 'SELECT *FROM [dbo].[Tasks] ORDER BY [Completed] DESC, [Name] ASC OFFSET ' + CAST(@Skip AS VARCHAR(10)) + ' ROWS FETCH NEXT ' + CAST(@Take AS VARCHAR(10)) + ' ROWS ONLY'
+    SET @SQL = 'SELECT *FROM [dbo].[Tasks] WHERE [Status] <> 2 ORDER BY [Completed] DESC, [Name] ASC OFFSET ' + CAST(@Skip AS VARCHAR(10)) + ' ROWS FETCH NEXT ' + CAST(@Take AS VARCHAR(10)) + ' ROWS ONLY'
     EXEC sp_ExecuteSQL @SQL
 END
 GO

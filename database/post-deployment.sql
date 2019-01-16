@@ -18,7 +18,7 @@ CREATE TABLE [dbo].[Statuses]
 INSERT INTO [dbo].[Statuses]([Name])
           SELECT (N'Active')
 UNION ALL SELECT (N'Completed')
-UNION ALL SELECT (N'Expired')
+UNION ALL SELECT (N'Archived')
 
 CREATE TABLE [dbo].[Priorities]
 (
@@ -68,7 +68,7 @@ AS
 BEGIN
     DECLARE @SQL NVARCHAR(MAX)
 
-    SET @SQL = 'SELECT *FROM [dbo].[Tasks] ORDER BY [Completed] DESC, [Name] ASC OFFSET ' + CAST(@Skip AS VARCHAR(10)) + ' ROWS FETCH NEXT ' + CAST(@Take AS VARCHAR(10)) + ' ROWS ONLY'
+    SET @SQL = 'SELECT *FROM [dbo].[Tasks] WHERE [Status] <> 2 ORDER BY [Completed] DESC, [Name] ASC OFFSET ' + CAST(@Skip AS VARCHAR(10)) + ' ROWS FETCH NEXT ' + CAST(@Take AS VARCHAR(10)) + ' ROWS ONLY'
     EXEC sp_ExecuteSQL @SQL
 END
 GO

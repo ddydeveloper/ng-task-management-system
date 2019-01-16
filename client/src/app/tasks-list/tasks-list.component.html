@@ -3,27 +3,45 @@
         <p-messages [(value)]="msgs" [closable]="false"></p-messages>
     </div>
     <div *ngIf="tasks.length> 0">
-        <p-table [value]="tasks" selectionMode="single"
-            [(selection)]="selectedTask" scrollHeight="50vh" [scrollable]="true">
-            <ng-template pTemplate="header">
+        <p-table selectionMode="single" scrollHeight="50vh"
+                [columns]="cols" 
+                [resizableColumns]="true"
+                [value]="tasks" 
+                [(selection)]="selectedTask"
+                [scrollable]="true">
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" [style.width]="col.width">
+                    <col style="width:10%">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th>Name</th>
-                    <th>Priority</th>
-                    <th>Added</th>
-                    <th>Time to complete</th>
+                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field" 
+                            ariaLabel="Activate to sort" 
+                            ariaLabelDesc="Activate to sort in descending order" 
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
                     <th>Actions</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-task>
                 <tr [pSelectableRow]="task">
-                    <td>{{task.name}}</td>
-                    <td>{{task.priority}}</td>
-                    <td>{{task.added | date: 'dd/MM/yyyy hh:ss'}}</td>
-                    <td>{{task.timeToComplete}}</td>
-                    <td></td>
+                    <td class="ui-resizable-column">{{task.name}}</td>
+                    <td class="ui-resizable-column">{{task.priority | priority}}</td>
+                    <td class="ui-resizable-column">{{task.added | date: 'dd/MM/yyyy hh:ss'}}</td>
+                    <td class="ui-resizable-column">{{task.timeToComplete}}</td>
+                    <td>
+                        <button pButton style="width:100%" *ngIf="task.isActive" label="Complete" class="ui-button-success"></button>
+                        <button pButton style="width:100%" *ngIf="!task.isActive" label="Delete" class="ui-button-danger"></button>
+                    </td>
                 </tr>
             </ng-template>
         </p-table>
+
         <p></p>
         <p-fieldset class="details-fieldset" *ngIf="selectedTask !== null" legend="Task details"
             [toggleable]="false">
@@ -41,11 +59,11 @@
                 </div>
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-2">Status:</div>
-                    <div class="ui-grid-col-10">{{selectedTask.status}}</div>
+                    <div class="ui-grid-col-10">{{selectedTask.status | status}}</div>
                 </div>
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-2">Priority:</div>
-                    <div class="ui-grid-col-10">{{selectedTask.priority}}</div>
+                    <div class="ui-grid-col-10">{{selectedTask.priority | priority}}</div>
                 </div>
 
                 <div class="ui-grid-row">

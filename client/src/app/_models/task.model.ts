@@ -9,7 +9,4 @@ export default class TaskModel {
     completed: Date;
     added: Date;
     status: ETaskStatus;
-
-    // Is used to display remaining time to complete
-    timeToComplete: string;
 }

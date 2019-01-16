@@ -1,7 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import TaskModel from "../_models/task.model";
 import { TasksApi } from "../_services/tasks.api";
 import { interval } from "rxjs";
+import TaskViewModel from "../_models/task.view-model";
+import TaskModel from "../_models/task.model";
+import { getDateDiffInSeconds, secondsToText } from "../_helpers/date.helper";
+import * as moment from "moment";
 
 @Component({
   selector: "app-tasks-list",
@@ -13,8 +16,15 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
   pollingTasks: any;
 
-  tasks: TaskModel[] = [];
-  selectedTask: TaskModel = null;
+  cols = [
+    { field: "name", header: "Name", width: "45%" },
+    { field: "priority", header: "Priority", width: "15%" },
+    { field: "added", header: "Added", width: "15%" },
+    { field: "timeToComplete", header: "Time to complete", width: "15%" }
+  ];
+
+  tasks: TaskViewModel[] = [];
+  selectedTask: TaskViewModel = null;
   msgs: any[] = [];
 
   ngOnInit() {
@@ -24,10 +34,17 @@ export class TasksListComponent implements OnInit, OnDestroy {
       detail: `Go to "Add new task" to create the first one`
     });
 
-    this.taskApi.getAllTasks(0, 200).subscribe((data: TaskModel[]) => this.tasks = data);
+    this.taskApi.getAllTasks(0, 200).subscribe((data: TaskModel[]) => {
+      data.forEach((t: TaskModel) => {
+        this.tasks.push(new TaskViewModel(t));
+      });
+    });
 
     this.pollingTasks = interval(1000).subscribe(() => {
-      this.tasks.forEach(() => 1);
+      let date = moment().toDate();
+      this.tasks.forEach((t: TaskViewModel) => {
+        t.timeToComplete = secondsToText(getDateDiffInSeconds(date, t.completed));
+      });
     });
   }
 
