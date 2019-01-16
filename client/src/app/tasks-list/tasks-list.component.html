@@ -1,9 +1,13 @@
 <div>
-    <div *ngIf="tasks.length === 0">
-        <p-messages [(value)]="msgs" [closable]="false"></p-messages>
-    </div>
-    <div *ngIf="tasks.length> 0">
-        <p-table selectionMode="single" scrollHeight="50vh"
+    <div>
+        <p-table selectionMode="single" 
+                scrollHeight="50vh"
+                [rows]="20" 
+                [virtualScroll]="true" 
+                (onLazyLoad)="loadDataOnScroll($event)"
+                [lazy]="true" 
+                [totalRecords]="totalTasks"
+                [loading]="loading"
                 [columns]="cols" 
                 [resizableColumns]="true"
                 [value]="tasks" 
@@ -34,9 +38,9 @@
                     <td class="ui-resizable-column">{{task.priority | priority}}</td>
                     <td class="ui-resizable-column">{{task.added | date: 'dd/MM/yyyy hh:ss'}}</td>
                     <td class="ui-resizable-column">{{task.timeToComplete}}</td>
-                    <td>
-                        <button pButton style="width:100%" *ngIf="task.isActive" label="Complete" class="ui-button-success"></button>
-                        <button pButton style="width:100%" *ngIf="!task.isActive" label="Delete" class="ui-button-danger"></button>
+                    <td class="ui-resizable-column">
+                        <button pButton style="width:100%; height: 34px;" *ngIf="task.isActive" label="Complete" class="ui-button-success"></button>
+                        <button pButton style="width:100%; height: 34px;" *ngIf="!task.isActive" label="Delete" class="ui-button-danger"></button>
                     </td>
                 </tr>
             </ng-template>

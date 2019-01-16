@@ -4,7 +4,11 @@
     {
         public const string GetAllTasks = @"[dbo].[GetAllTasks]";
 
+        public const string GetAllTasksCount = @"SELECT COUNT(1) FROM [dbo].[Tasks] WHERE [Status] <> 2";
+
         public const string GetTasksByStatus = @"[dbo].[GetTasksByStatus]";
+        
+        public const string GetTasksByStatusCount = @"SELECT COUNT(1) FROM [dbo].[Tasks] WHERE [Status] = @Status";
 
         public const string CreateTask = @"
 INSERT INTO [dbo].[Tasks] ([Name], [Description], [Completed], [Status], [Priority])

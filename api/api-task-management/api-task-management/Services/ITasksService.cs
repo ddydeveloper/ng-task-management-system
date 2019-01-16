@@ -8,6 +8,8 @@ namespace api_task_management.Services
     {
         Task<IEnumerable<TaskDto>> GetTasksAsync(int? status, int skip, int take);
 
+        Task<int> GetTasksCountAsync(int? status);
+        
         Task<TaskDto> CreateTaskAsync(TaskDto dto);
 
         Task<TaskDto> UpdateTaskAsync(TaskDto dto);

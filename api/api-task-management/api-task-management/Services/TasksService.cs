@@ -45,6 +45,26 @@ namespace api_task_management.Services
             return result;
         }
 
+        public async Task<int> GetTasksCountAsync(int? status)
+        {
+            int result;
+            using (var conn = new SqlConnection(_connectionStrings.TasksDb))
+            {
+                if (status.HasValue)
+                {
+                    var param = new DynamicParameters();
+                    param.Add("@Status", status.Value, DbType.Int32, ParameterDirection.Input);
+                    result = await conn.ExecuteScalarAsync<int>(NativeSql.GetTasksByStatusCount, param);
+                }
+                else
+                {
+                    result = await conn.ExecuteScalarAsync<int>(NativeSql.GetAllTasksCount);
+                }
+            }
+
+            return result;
+        }
+
         public async Task<TaskDto> CreateTaskAsync(TaskDto dto)
         {
             int createdId;

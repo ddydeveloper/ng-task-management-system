@@ -23,6 +23,12 @@ namespace api_task_management.Controllers
             return await _tasksService.GetTasksAsync(status, skip, take);
         }
 
+        [HttpGet("count")]
+        public async Task<int> GetTasksCountAsync(int? status)
+        {
+            return await _tasksService.GetTasksCountAsync(status);
+        }
+
         [HttpPost]
         public async Task<TaskDto> CreateTaskAsync(TaskDto dto)
         {

@@ -19,8 +19,16 @@ export class TasksApi {
         return this.http.get<TaskModel[]>(`${base_url}/api/tasks?skip=${skip}&take=${take}`, options);
     }
 
+    public getAllTasksCount = (): Observable<number> => {
+        return this.http.get<number>(`${base_url}/api/tasks/count`, options);
+    }
+
     public getTasksByStatus = (status: ETaskStatus, skip: number, take: number): Observable<TaskModel[]> => {
         return this.http.get<TaskModel[]>(`${base_url}/api/tasks?status=${status}&skip=${skip}&take=${take}`, options);
+    }
+
+    public getTasksByStatusCount = (status: ETaskStatus): Observable<number> => {
+        return this.http.get<number>(`${base_url}/api/tasks/count?status=${status}`, options);
     }
 
     public createTask = (task: TaskModel): Observable<TaskModel> => {
