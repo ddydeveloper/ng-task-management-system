@@ -36,6 +36,6 @@ export class TasksApi {
     }
 
     public updateTask = (task: TaskModel): Observable<TaskModel> => {
-        return this.http.put<TaskModel>(`${base_url}/api/tasks`, task, options);
+        return this.http.put<TaskModel>(`${base_url}/api/tasks/${task.id}`, task, options);
     }
 }

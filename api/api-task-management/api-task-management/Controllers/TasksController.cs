@@ -35,8 +35,8 @@ namespace api_task_management.Controllers
             return await _tasksService.CreateTaskAsync(dto);
         }
 
-        [HttpPut]
-        public async Task<TaskDto> UpdateTaskAsync(TaskDto dto)
+        [HttpPut("{id}")]
+        public async Task<TaskDto> UpdateTaskAsync(int id, TaskDto dto)
         {
             return await _tasksService.UpdateTaskAsync(dto);
         }

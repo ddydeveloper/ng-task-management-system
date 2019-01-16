@@ -11,8 +11,16 @@ function secondsToText(value: number): string {
         return `${Math.floor(value / count)} w.`;
     }
 
+    if (value < -count) {
+        return `${Math.floor(value / count)} w.`;
+    }
+
     count /= 24;
     if (value > count) {
+        return `${Math.floor(value / count)} d.`;
+    }
+
+    if (value < -count) {
         return `${Math.floor(value / count)} d.`;
     }
 
@@ -21,8 +29,16 @@ function secondsToText(value: number): string {
         return `${Math.floor(value / count)} h.`;
     }
 
+    if (value < -count) {
+        return `${Math.floor(value / count)} h.`;
+    }
+
     count /= 60;
     if (value > count) {
+        return `${Math.floor(value / count)} m.`;
+    }
+
+    if (value < -count) {
         return `${Math.floor(value / count)} m.`;
     }
 

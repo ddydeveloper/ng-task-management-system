@@ -1,7 +1,11 @@
 <div>
     <div>
+        <p></p>
+        <p-selectButton [options]="statuses" [(ngModel)]="selectedStatus" (onChange)="onStatusChanged()"></p-selectButton>
+        <p></p>
         <p-table selectionMode="single" 
-                scrollHeight="50vh"
+                scrollHeight="48vh"
+                responsive="true"
                 [rows]="20" 
                 [virtualScroll]="true" 
                 (onLazyLoad)="loadDataOnScroll($event)"
@@ -12,35 +16,38 @@
                 [resizableColumns]="true"
                 [value]="tasks" 
                 [(selection)]="selectedTask"
+                (onRowSelect)="onRowSelect($event)" 
+                (onRowUnselect)="onRowUnselect($event)"
                 [scrollable]="true">
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                     <col *ngFor="let col of columns" [style.width]="col.width">
-                    <col style="width:10%">
+                    <col>
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
                         {{col.header}}
-                        <p-sortIcon [field]="col.field" 
+                        <p-sortIcon *ngIf="col.sortable" [field]="col.field" 
                             ariaLabel="Activate to sort" 
                             ariaLabelDesc="Activate to sort in descending order" 
                             ariaLabelAsc="Activate to sort in ascending order">
                         </p-sortIcon>
                     </th>
-                    <th>Actions</th>
+                    <th></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-task>
                 <tr [pSelectableRow]="task">
                     <td class="ui-resizable-column">{{task.name}}</td>
                     <td class="ui-resizable-column">{{task.priority | priority}}</td>
-                    <td class="ui-resizable-column">{{task.added | date: 'dd/MM/yyyy hh:ss'}}</td>
+                    <td class="ui-resizable-column">{{task.added | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
+                    <td class="ui-resizable-column">{{task.completed | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
                     <td class="ui-resizable-column">{{task.timeToComplete}}</td>
                     <td class="ui-resizable-column">
-                        <button pButton style="width:100%; height: 34px;" *ngIf="task.isActive" label="Complete" class="ui-button-success"></button>
-                        <button pButton style="width:100%; height: 34px;" *ngIf="!task.isActive" label="Delete" class="ui-button-danger"></button>
+                        <i *ngIf="task.isActive" class="pi pi-check complete-icon" pTooltip="Complete task" tooltipPosition="top" (click)="showCompleteDialog = true"></i>
+                        <i *ngIf="!task.isActive" class="pi pi-trash delete-icon" pTooltip="Delete task" tooltipPosition="top" (click)="showDeleteDialog = true"></i>
                     </td>
                 </tr>
             </ng-template>
@@ -77,4 +84,38 @@
             </div>
         </p-fieldset>
     </div>
+
+    <p-dialog header="Confirmation" 
+            [(visible)]="showCompleteDialog" 
+            [modal]="true" 
+            [responsive]="true" 
+            [baseZIndex]="10000">
+        <span>
+            Are you sure want to complete the selected task?<br/>
+            Please click on "OK" button to confirm operation.<br/>
+            Click on "Cancel" button to close the dialog.
+        </span>
+        <p-footer>
+            <button type="button" pButton (click)="confirmCompleteDialog()" label="OK"></button>
+            <button type="button" pButton (click)="closeDialog()" label="Cancel" class="ui-button-secondary"></button>
+        </p-footer>
+    </p-dialog>
+
+    <p-dialog header="Confirmation"
+            [(visible)]="showDeleteDialog"
+            [modal]="true"
+            [responsive]="true"
+            [baseZIndex]="10000">
+        <span>
+            Are you sure want to delete the selected task?<br/>
+            Please click on "OK" button to confirm operation.<br/>
+            Click on "Cancel" button to close the dialog. 
+        </span>
+        <p-footer>
+            <button type="button" pButton (click)="confirmDeleteDialog()" label="OK"></button>
+            <button type="button" pButton (click)="closeDialog()" label="Cancel" class="ui-button-secondary"></button>
+        </p-footer>
+    </p-dialog>
+
+    <p-toast></p-toast>
 </div>

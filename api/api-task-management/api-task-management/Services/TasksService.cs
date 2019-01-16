@@ -89,6 +89,7 @@ namespace api_task_management.Services
             using (var conn = new SqlConnection(_connectionStrings.TasksDb))
             {
                 var param = new DynamicParameters();
+                param.Add("@Id", dto.Id, DbType.Int32, ParameterDirection.Input);
                 param.Add("@Name", dto.Name, DbType.String, ParameterDirection.Input);
                 param.Add("@Description", dto.Description, DbType.String, ParameterDirection.Input);
                 param.Add("@Priority", dto.Priority, DbType.Byte, ParameterDirection.Input);

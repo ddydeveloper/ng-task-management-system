@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { TasksApi } from "../_services/tasks.api";
-import { interval, forkJoin } from "rxjs";
+import { interval, forkJoin, Observable } from "rxjs";
 import TaskViewModel from "../_models/task.view-model";
 import TaskModel from "../_models/task.model";
 import { getDateDiffInSeconds, secondsToText } from "../_helpers/date.helper";
 import * as moment from "moment";
-import { LazyLoadEvent, MessageService } from "primeng/api";
+import { LazyLoadEvent, MessageService, SelectItem } from "primeng/api";
+import { ETaskStatus } from "../_enums/task-status.enum";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-tasks-list",
@@ -15,39 +17,126 @@ import { LazyLoadEvent, MessageService } from "primeng/api";
 export class TasksListComponent implements OnInit, OnDestroy {
   constructor(
     private taskApi: TasksApi,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   pollingTasks: any;
 
   cols = [
-    { field: "name", header: "Name", width: "45%" },
-    { field: "priority", header: "Priority", width: "15%" },
-    { field: "added", header: "Added", width: "15%" },
-    { field: "timeToComplete", header: "Time to complete", width: "15%" }
+    { field: "name", header: "Name", width: "36.7%", sortable: true },
+    { field: "priority", header: "Priority", width: "15%", sortable: true },
+    { field: "added", header: "Added", width: "15%", sortable: false },
+    { field: "completed", header: "Deadline", width: "15%", sortable: false },
+    {
+      field: "timeToComplete",
+      header: "Time to complete",
+      width: "15%",
+      sortable: false
+    }
   ];
+
+  showCompleteDialog = false;
+  showDeleteDialog = false;
 
   tasks: TaskViewModel[] = [];
   totalTasks: number;
   loading: boolean;
   selectedTask: TaskViewModel = null;
 
-  loadDataOnScroll(event: LazyLoadEvent) {
+  statuses: SelectItem[] = [
+    { label: "All", value: null },
+    { label: "Active", value: ETaskStatus.Active },
+    { label: "Completed", value: ETaskStatus.Completed }
+  ];
+
+  selectedStatus: ETaskStatus = this.statuses[0].value;
+  skip = 0;
+  take = 40;
+
+  loadDataOnScroll(event: LazyLoadEvent): void {
     if (event.first + event.rows > this.totalTasks) {
       return;
     }
 
-    this.loadData(event.first, event.rows);
+    this.skip = event.first;
+    this.take = event.rows;
+
+    this.loadData();
   }
 
-  loadData(skip: number, take: number): void {
+  onStatusChanged(): void {
+    this.loadData();
+  }
+
+  closeDialog(): void {
+    this.showCompleteDialog = false;
+    this.showDeleteDialog = false;
+  }
+
+  confirmCompleteDialog(): void {
+    this.updateTaskStatus(ETaskStatus.Completed);
+  }
+
+  confirmDeleteDialog(): void {
+    this.updateTaskStatus(ETaskStatus.Archived);
+  }
+
+  onRowSelect(event: any): void {
+    debugger;
+    window.history.replaceState({}, "", `${this.router.url}/${this.selectedTask.id}`);
+  }
+
+  onRowUnselect(event: any): void {
+    debugger;
+    window.history.replaceState({}, "", `${this.router.url}`);
+  }
+
+  updateTaskStatus(status: ETaskStatus): void {
+    const updated = Object.assign({}, this.selectedTask);
+    updated.status = status;
+    this.taskApi.updateTask(updated).subscribe(
+      () => {
+        this.loadData();
+        this.messageService.add({
+          severity: "success",
+          summary: "Updated",
+          detail: "A task status was succesfully updated"
+        });
+      },
+      () => {
+        this.messageService.add({
+          severity: "error",
+          summary: "Task updating error",
+          detail: "An error occured when updating task status"
+        });
+      }
+    );
+
+    this.showCompleteDialog = false;
+    this.showDeleteDialog = false;
+  }
+
+  loadData(): void {
     this.loading = true;
     this.tasks = [];
+    this.selectedTask = null;
 
-    const obs = forkJoin(
-      this.taskApi.getAllTasks(skip, take),
-      this.taskApi.getAllTasksCount()
-    );
+    const obs =
+      this.selectedStatus !== null
+        ? forkJoin(
+            this.taskApi.getTasksByStatus(
+              this.selectedStatus,
+              this.skip,
+              this.take
+            ),
+            this.taskApi.getTasksByStatusCount(this.selectedStatus)
+          )
+        : forkJoin(
+            this.taskApi.getAllTasks(this.skip, this.take),
+            this.taskApi.getAllTasksCount()
+          );
 
     obs.subscribe(
       (result: any) => {
@@ -57,14 +146,16 @@ export class TasksListComponent implements OnInit, OnDestroy {
             this.tasks.push(new TaskViewModel(t));
           });
         }
+
+        this.loading = false;
       },
-      () =>
+      () => {
         this.messageService.add({
           severity: "error",
           summary: "Task loading error",
           detail: "An error occured when loading tasks"
-        }),
-      () => {
+        });
+
         this.loading = false;
       }
     );
@@ -72,7 +163,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.pollingTasks = interval(1000).subscribe(() => {
-      let date = moment().toDate();
+      const date = moment().toDate();
       this.tasks.forEach((t: TaskViewModel) => {
         t.timeToComplete = secondsToText(
           getDateDiffInSeconds(date, t.completed)

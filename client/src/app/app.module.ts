@@ -9,6 +9,7 @@ import { PrimengModule } from "./_primeng.module";
 import { TasksApi } from "./_services/tasks.api";
 import { StatusPipe } from "./_pipes/status.pipe";
 import { PriorityPipe } from "./_pipes/priority.pipe";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { PriorityPipe } from "./_pipes/priority.pipe";
     BrowserModule,
     AppRoutingModule,
     PrimengModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [TasksApi],
   bootstrap: [AppComponent]

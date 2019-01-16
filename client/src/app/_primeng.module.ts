@@ -9,6 +9,9 @@ import { MessageService } from "primeng/api";
 import { PanelModule } from "primeng/panel";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FieldsetModule } from "primeng/fieldset";
+import { SelectButtonModule } from "primeng/selectbutton";
+import { TooltipModule } from "primeng/tooltip";
+import { DialogModule } from "primeng/dialog";
 
 @NgModule({
   imports: [
@@ -20,7 +23,9 @@ import { FieldsetModule } from "primeng/fieldset";
     MessageModule,
     ToastModule,
     PanelModule,
-    FieldsetModule
+    FieldsetModule,
+    SelectButtonModule,
+    DialogModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -31,7 +36,10 @@ import { FieldsetModule } from "primeng/fieldset";
     MessageModule,
     ToastModule,
     PanelModule,
-    FieldsetModule
+    FieldsetModule,
+    SelectButtonModule,
+    TooltipModule,
+    DialogModule
   ],
   providers: [MessageService]
 })

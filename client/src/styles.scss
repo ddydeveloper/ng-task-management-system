@@ -8,6 +8,18 @@
   margin-right: 0;
 }
 
-span > .ui-button {
-  height: 24px;
+.complete-icon {
+  color: #34a835;
+}
+
+.delete-icon {
+  color: #e91224;
+}
+
+.complete-icon:hover {
+  color: #006400;
+}
+
+.delete-icon:hover {
+  color: #8B0000;
 }
