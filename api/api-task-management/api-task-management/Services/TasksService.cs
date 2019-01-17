@@ -66,7 +66,7 @@ namespace api_task_management.Services
                     param.Add("@Status", status.Value, DbType.Int32, ParameterDirection.Input);
                 }
 
-                result = (await conn.QueryAsync<int?>(sql, param)).Single();
+                result = (await conn.QueryAsync<int?>(sql, param)).SingleOrDefault();
             }
 
             return result;

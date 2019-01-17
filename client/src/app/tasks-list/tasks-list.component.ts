@@ -188,6 +188,17 @@ export class TasksListComponent implements OnInit, OnDestroy {
             : this.taskApi.getTasksRowNumber(taskId);
 
         obs.subscribe((row: number) => {
+          if (!row) {
+            this.onRowUnselect();
+            this.initialTaskId = null;
+
+            this.messageService.add({
+              severity: "info",
+              summary: "Wrong task ID in URL",
+              detail: `There are no tasks with the ID = "${taskId}", the first page was loaded`
+            });
+          }
+
           if (row > this.rows) {
             this.first = Math.trunc(row / this.rows) * this.rows;
           }
