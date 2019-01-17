@@ -53,7 +53,7 @@ BULK INSERT [dbo].[Tasks]
     FROM '\opt\mssql-scripts\data.csv'
     WITH
     (
-        FIRSTROW = 1,
+        FIRSTROW = 2,
         FIELDTERMINATOR = ';', 
         ROWTERMINATOR = '\n'
     )

@@ -1,4 +1,4 @@
-import { BlackHex, WhiteHex } from '../constants/colors.constants';
+import { BlackHex, WhiteHex } from "../_constants/colors.constants";
 
 function isLightHex(hex: string): boolean {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);

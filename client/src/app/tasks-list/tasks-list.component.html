@@ -38,10 +38,10 @@
                 <ng-template pTemplate="body" let-task>
                     <tr [pSelectableRow]="task">
                         <td class="ui-resizable-column">{{task.name}}</td>
-                        <td class="ui-resizable-column">{{task.priority | priority}}</td>
+                        <td class="ui-resizable-column" [ngStyle]="getPriorityStyle(task.priority)">{{task.priority | priority}}</td>
                         <td class="ui-resizable-column">{{task.added | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
                         <td class="ui-resizable-column">{{task.completed | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
-                        <td class="ui-resizable-column">{{task.timeToComplete}}</td>
+                        <td class="ui-resizable-column" [ngStyle]="getTimeToCompleteStyle(task)">{{task.timeToCompleteText}}</td>
                         <td class="ui-resizable-column">
                             <i *ngIf="task.isActive" class="pi pi-check complete-icon" pTooltip="Complete task" tooltipPosition="top" (click)="showCompleteDialog = true"></i>
                             <i *ngIf="!task.isActive" class="pi pi-trash delete-icon" pTooltip="Delete task" tooltipPosition="top" (click)="showDeleteDialog = true"></i>

@@ -13,6 +13,14 @@ import { HubConnection } from "@aspnet/signalr";
 import { environment } from "src/environments/environment";
 import * as signalR from "@aspnet/signalr";
 import { closestNext } from "../_helpers/number.helper";
+import { ETaskPriority } from "../_enums/task-priority.enum";
+import {
+  DarkedRedHex,
+  DangerHex,
+  WarningHex,
+  SuccessHex
+} from "../_constants/colors.constants";
+import { getTextColor } from "../_helpers/color.helper";
 
 @Component({
   selector: "app-tasks-list",
@@ -66,6 +74,38 @@ export class TasksListComponent implements OnInit, OnDestroy {
   first = 0;
   rows = 15;
   rowsPerPageOptions = [15, 30, 100, 500, 1000];
+
+  getPriorityStyle(priority: ETaskPriority): any {
+    if (priority === ETaskPriority.Blocker) {
+      return { "background-color": DarkedRedHex, "color": getTextColor(DarkedRedHex) };
+    }
+
+    if (priority === ETaskPriority.Highest) {
+      return { "background-color": DangerHex, "color": getTextColor(DangerHex) };
+    }
+
+    if (priority === ETaskPriority.High) {
+      return { "background-color": WarningHex, "color": getTextColor(WarningHex) };
+    }
+
+    return null;
+  }
+
+  getTimeToCompleteStyle(task: TaskViewModel): any {
+    if (task.status === ETaskStatus.Completed) {
+      return { "background-color": SuccessHex, "color": getTextColor(SuccessHex) };
+    }
+
+    if (task.timeToComplete < 0) {
+      return { "background-color": DangerHex, "color": getTextColor(DangerHex) };
+    }
+
+    if (task.timeToComplete < 60 * 60) {
+      return { "background-color": WarningHex, "color": getTextColor(WarningHex) };
+    }
+
+    return null;
+  }
 
   refreshData(): void {
     this.first = 0;
@@ -214,11 +254,13 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
     this.pollingTasks = interval(1000).subscribe(() => {
       const date = moment().toDate();
-      this.tasks.forEach((t: TaskViewModel) => {
-        t.timeToComplete = secondsToText(
-          getDateDiffInSeconds(date, t.completed)
-        );
-      });
+      this.tasks
+        .filter(t => t.status !== ETaskStatus.Completed)
+        .forEach((t: TaskViewModel) => {
+          const diff = getDateDiffInSeconds(date, t.completed);
+          t.timeToComplete = diff;
+          t.timeToCompleteText = secondsToText(diff);
+        });
     });
 
     this.hubConnection = new signalR.HubConnectionBuilder()
