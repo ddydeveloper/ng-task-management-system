@@ -58,6 +58,8 @@ BULK INSERT [dbo].[Tasks]
         ROWTERMINATOR = '\n'
     )
 
+PRINT N'BULK INSERT Completed'
+
 GO
 CREATE PROCEDURE [dbo].[GetAllTasks]
 (
@@ -89,3 +91,7 @@ BEGIN
 
 END
 GO
+
+PRINT N'Tasks DB Prepared'
+
+USE [master]
