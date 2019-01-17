@@ -7,7 +7,7 @@ const routes: Routes = [
   { path: "", redirectTo: "tasks", pathMatch: "full" },
   { path: "tasks", component: TasksListComponent, pathMatch: "full" },
   { path: "tasks/:id", component: TasksListComponent, pathMatch: "full" },
-  { path: "tasks/new", component: TaskAddComponent, pathMatch: "full" }
+  { path: "new/tasks", component: TaskAddComponent, pathMatch: "full" }
 ];
 
 @NgModule({

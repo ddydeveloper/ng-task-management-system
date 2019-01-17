@@ -47,13 +47,13 @@ CREATE TABLE [dbo].[Tasks]
     FOREIGN KEY (Status) REFERENCES [dbo].[Statuses](Id)
 )
 
-DECLARE @Idx            INT = 1,
+DECLARE @Idx            INT = 0,
         @Added          DATETIME = GETDATE(),
         @RandomDate     INT,
         @RandomStatus   INT,
         @RandomPriority INT
 
-WHILE @Idx >=1 and @Idx <= 100000
+WHILE @Idx >= 0 AND @Idx <= 100000
 BEGIN
     SELECT @RandomDate = ROUND(((21 - 1) * RAND()), 0),
            @RandomStatus = ROUND(((2 - 1) * RAND()), 0),

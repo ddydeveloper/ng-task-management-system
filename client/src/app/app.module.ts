@@ -9,7 +9,7 @@ import { PrimengModule } from "./_primeng.module";
 import { TasksApi } from "./_services/tasks.api";
 import { StatusPipe } from "./_pipes/status.pipe";
 import { PriorityPipe } from "./_pipes/priority.pipe";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -24,7 +24,8 @@ import { FormsModule } from "@angular/forms";
     AppRoutingModule,
     PrimengModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [TasksApi],
   bootstrap: [AppComponent]

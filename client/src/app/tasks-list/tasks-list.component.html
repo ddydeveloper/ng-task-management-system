@@ -1,57 +1,56 @@
 <div>
-    <div>
+    <div *ngIf="isInitialized">
+        <div style="margin-top: 8px;">
+            <p-selectButton [options]="statuses" [(ngModel)]="selectedStatus" (onChange)="onStatusChanged()"></p-selectButton>
+            <button [style.float]="'right'" type="button" pButton (click)="refreshData()" label="Refresh"></button>
+        </div>        
         <p></p>
-        <p-selectButton [options]="statuses" [(ngModel)]="selectedStatus" (onChange)="onStatusChanged()"></p-selectButton>
-        <p></p>
-        <p-table selectionMode="single" 
-                scrollHeight="48vh"
-                responsive="true"
-                [rows]="20" 
-                [virtualScroll]="true" 
-                (onLazyLoad)="loadDataOnScroll($event)"
-                [lazy]="true" 
-                [totalRecords]="totalTasks"
-                [loading]="loading"
-                [columns]="cols" 
-                [resizableColumns]="true"
-                [value]="tasks" 
-                [(selection)]="selectedTask"
-                (onRowSelect)="onRowSelect()" 
-                (onRowUnselect)="onRowUnselect()"
-                [scrollable]="true">
-            <ng-template pTemplate="colgroup" let-columns>
-                <colgroup>
-                    <col *ngFor="let col of columns" [style.width]="col.width">
-                    <col>
-                </colgroup>
-            </ng-template>
-            <ng-template pTemplate="header" let-columns>
-                <tr>
-                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
-                        {{col.header}}
-                        <p-sortIcon *ngIf="col.sortable" [field]="col.field" 
-                            ariaLabel="Activate to sort" 
-                            ariaLabelDesc="Activate to sort in descending order" 
-                            ariaLabelAsc="Activate to sort in ascending order">
-                        </p-sortIcon>
-                    </th>
-                    <th></th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-task>
-                <tr [pSelectableRow]="task">
-                    <td class="ui-resizable-column">{{task.name}}</td>
-                    <td class="ui-resizable-column">{{task.priority | priority}}</td>
-                    <td class="ui-resizable-column">{{task.added | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
-                    <td class="ui-resizable-column">{{task.completed | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
-                    <td class="ui-resizable-column">{{task.timeToComplete}}</td>
-                    <td class="ui-resizable-column">
-                        <i *ngIf="task.isActive" class="pi pi-check complete-icon" pTooltip="Complete task" tooltipPosition="top" (click)="showCompleteDialog = true"></i>
-                        <i *ngIf="!task.isActive" class="pi pi-trash delete-icon" pTooltip="Delete task" tooltipPosition="top" (click)="showDeleteDialog = true"></i>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
+        <div class="scrollable-container" style="height: 59vh">
+            <p-table selectionMode="single"
+                    responsive="true"
+                    [rows]="rows"
+                    [loading]="loading"
+                    [columns]="cols" 
+                    [resizableColumns]="true"
+                    [value]="tasks" 
+                    [(selection)]="selectedTask"
+                    (onRowSelect)="onRowSelect()" 
+                    (onRowUnselect)="onRowUnselect()">
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <col *ngFor="let col of columns" [style.width]="col.width">
+                        <col>
+                    </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+                            {{col.header}}
+                            <p-sortIcon *ngIf="col.sortable" [field]="col.field" 
+                                ariaLabel="Activate to sort" 
+                                ariaLabelDesc="Activate to sort in descending order" 
+                                ariaLabelAsc="Activate to sort in ascending order">
+                            </p-sortIcon>
+                        </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-task>
+                    <tr [pSelectableRow]="task">
+                        <td class="ui-resizable-column">{{task.name}}</td>
+                        <td class="ui-resizable-column">{{task.priority | priority}}</td>
+                        <td class="ui-resizable-column">{{task.added | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
+                        <td class="ui-resizable-column">{{task.completed | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
+                        <td class="ui-resizable-column">{{task.timeToComplete}}</td>
+                        <td class="ui-resizable-column">
+                            <i *ngIf="task.isActive" class="pi pi-check complete-icon" pTooltip="Complete task" tooltipPosition="top" (click)="showCompleteDialog = true"></i>
+                            <i *ngIf="!task.isActive" class="pi pi-trash delete-icon" pTooltip="Delete task" tooltipPosition="top" (click)="showDeleteDialog = true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <p-paginator [rows]="15" [rowsPerPageOptions]="rowsPerPageOptions" pageLinkSize="10" [totalRecords]="totalTasks" [first]="first" (onPageChange)="onPageChanged($event)"></p-paginator>
 
         <p></p>
         <p-fieldset class="details-fieldset" *ngIf="selectedTask !== null" legend="Task details"

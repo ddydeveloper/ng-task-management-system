@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using api_task_management.Dtos;
 using Dapper;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace api_task_management.Services
@@ -14,32 +13,60 @@ namespace api_task_management.Services
     {
         private readonly ConnectionStrings _connectionStrings;
 
-        private readonly ILogger<ITasksService> _logger;
-
-        public TasksService(IOptions<ConnectionStrings> connectionStrings, ILogger<ITasksService> logger)
+        public TasksService(IOptions<ConnectionStrings> connectionStrings)
         {
             _connectionStrings = connectionStrings.Value;
-            _logger = logger;
         }
 
-        public async Task<IEnumerable<TaskDto>> GetTasksAsync(int? status, int skip, int take)
+        public async Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take)
         {
-            IEnumerable<TaskDto> result;
+            IEnumerable<TaskDto> tasks;
+            int totalCount;
+
             using (var conn = new SqlConnection(_connectionStrings.TasksDb))
             {
-                var sql = NativeSql.GetAllTasks;
+                var tasksSql = NativeSql.GetAllTasks;
+                var countSql = NativeSql.GetAllTasksCount;
 
-                var param = new DynamicParameters();
-                param.Add("@Skip", skip, DbType.Int32, ParameterDirection.Input);
-                param.Add("@Take", take, DbType.Int32, ParameterDirection.Input);
-                
+                var tasksParam = new DynamicParameters();
+                tasksParam.Add("@Skip", skip, DbType.Int32, ParameterDirection.Input);
+                tasksParam.Add("@Take", take, DbType.Int32, ParameterDirection.Input);
+
+                DynamicParameters countParam = null;
+
                 if (status.HasValue)
                 {
-                    sql = NativeSql.GetTasksByStatus;
+                    tasksSql = NativeSql.GetTasksByStatus;
+                    tasksParam.Add("@Status", status.Value, DbType.Int32, ParameterDirection.Input);
+
+                    countSql = NativeSql.GetTasksByStatusCount;
+                    countParam = new DynamicParameters();
+                    countParam.Add("@Status", status.Value, DbType.Int32, ParameterDirection.Input);
+                }
+
+                tasks = await conn.QueryAsync<TaskDto>(tasksSql, tasksParam, commandType: CommandType.StoredProcedure);
+                totalCount = await conn.ExecuteScalarAsync<int>(countSql, countParam);
+            }
+
+            return new TaskSetDto {Tasks = tasks, TotalCount = totalCount};
+        }
+
+        public async Task<int?> GetTaskRowNumber(int taskId, int? status)
+        {
+            int? result;
+            using (var conn = new SqlConnection(_connectionStrings.TasksDb))
+            {
+                var sql = NativeSql.GetTaskRowNumber;
+                var param = new DynamicParameters();
+                param.Add("@Id", taskId, DbType.Int32, ParameterDirection.Input);
+
+                if (status.HasValue)
+                {
+                    sql = NativeSql.GetTaskRowNumberByStatus;
                     param.Add("@Status", status.Value, DbType.Int32, ParameterDirection.Input);
                 }
-                
-                result = await conn.QueryAsync<TaskDto>(sql, param, commandType: CommandType.StoredProcedure);
+
+                result = (await conn.QueryAsync<int?>(sql, param)).Single();
             }
 
             return result;
@@ -74,7 +101,6 @@ namespace api_task_management.Services
                 param.Add("@Name", dto.Name, DbType.String, ParameterDirection.Input);
                 param.Add("@Description", dto.Description, DbType.String, ParameterDirection.Input);
                 param.Add("@Priority", dto.Priority, DbType.Byte, ParameterDirection.Input);
-                param.Add("@Status", dto.Status, DbType.Byte, ParameterDirection.Input);
                 param.Add("@Completed", dto.Completed, DbType.DateTime, ParameterDirection.Input);
 
                 createdId = (await conn.QueryAsync<int>(NativeSql.CreateTask, param)).Single();

@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import TaskModel from "../_models/task.model";
 import { ETaskStatus } from "../_enums/task-status.enum";
 import { environment } from "src/environments/environment";
+import TaskSetModel from "../_models/task-set.model";
 
 const base_url = environment.API_URL;
 const headers = new HttpHeaders().set("Accept", "application/json; v=1.0").set("Content-type", "application/json; v=1.0");
@@ -15,20 +16,20 @@ const options = { headers: headers };
 export class TasksApi {
     constructor(private http: HttpClient) { }
 
-    public getAllTasks = (skip: number, take: number): Observable<TaskModel[]> => {
-        return this.http.get<TaskModel[]>(`${base_url}/api/tasks?skip=${skip}&take=${take}`, options);
+    public getAllTasks = (skip: number, take: number): Observable<TaskSetModel> => {
+        return this.http.get<TaskSetModel>(`${base_url}/api/tasks?skip=${skip}&take=${take}`, options);
     }
 
-    public getAllTasksCount = (): Observable<number> => {
-        return this.http.get<number>(`${base_url}/api/tasks/count`, options);
+    public getTasksRowNumber = (id: number): Observable<number> => {
+        return this.http.get<number>(`${base_url}/api/tasks/${id}/number`, options);
     }
 
-    public getTasksByStatus = (status: ETaskStatus, skip: number, take: number): Observable<TaskModel[]> => {
-        return this.http.get<TaskModel[]>(`${base_url}/api/tasks?status=${status}&skip=${skip}&take=${take}`, options);
+    public getTasksByStatus = (status: ETaskStatus, skip: number, take: number): Observable<TaskSetModel> => {
+        return this.http.get<TaskSetModel>(`${base_url}/api/tasks?status=${status}&skip=${skip}&take=${take}`, options);
     }
 
-    public getTasksByStatusCount = (status: ETaskStatus): Observable<number> => {
-        return this.http.get<number>(`${base_url}/api/tasks/count?status=${status}`, options);
+    public getTasksRowNumberByStatus = (id: number, status: ETaskStatus): Observable<number> => {
+        return this.http.get<number>(`${base_url}/api/tasks/${id}?status=${status}`, options);
     }
 
     public createTask = (task: TaskModel): Observable<TaskModel> => {

@@ -1,4 +1,5 @@
 ﻿using System;
+using api_task_management.Hubs;
 using api_task_management.Services;
 using MedicalApi;
 using Microsoft.AspNetCore.Builder;
@@ -36,10 +37,8 @@ namespace api_task_management
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll", p => { p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
-            });
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSignalR();
 
             services.AddMvcCore()
                 .AddVersionedApiExplorer(options =>
@@ -48,7 +47,11 @@ namespace api_task_management
                     options.AssumeDefaultVersionWhenUnspecified = true;
                 });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    p => { p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials(); });
+            });
 
             services.AddApiVersioning(options =>
                 {
@@ -91,9 +94,11 @@ namespace api_task_management
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseCors("AllowAll");
-            app.UseMvcWithDefaultRoute();
+            app.UseHttpsRedirection()
+                .UseCors("AllowAll")
+                .UseSignalR(route => { route.MapHub<NotificationsHub>("/hubs/notifications"); })
+                .UseMvcWithDefaultRoute();
+
             app.UseSwagger();
             app.UseSwaggerUI(
                 options =>
@@ -105,7 +110,7 @@ namespace api_task_management
                             description.GroupName.ToUpperInvariant());
                     }
                 });
-
+            
             var logger = loggerFactory.CreateLogger("RequestInfoLogger");
 
             logger.LogInformation($"TasksDb connection string is: {_tasksConnection}");

@@ -12,6 +12,11 @@ import { FieldsetModule } from "primeng/fieldset";
 import { SelectButtonModule } from "primeng/selectbutton";
 import { TooltipModule } from "primeng/tooltip";
 import { DialogModule } from "primeng/dialog";
+import { DropdownModule } from "primeng/dropdown";
+import { CalendarModule } from "primeng/calendar";
+import { InputTextareaModule } from "primeng/inputtextarea";
+import { InputTextModule } from "primeng/inputtext";
+import { PaginatorModule } from "primeng/paginator";
 
 @NgModule({
   imports: [
@@ -25,7 +30,12 @@ import { DialogModule } from "primeng/dialog";
     PanelModule,
     FieldsetModule,
     SelectButtonModule,
-    DialogModule
+    DialogModule,
+    DropdownModule,
+    CalendarModule,
+    InputTextareaModule,
+    InputTextModule,
+    PaginatorModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -39,7 +49,12 @@ import { DialogModule } from "primeng/dialog";
     FieldsetModule,
     SelectButtonModule,
     TooltipModule,
-    DialogModule
+    DialogModule,
+    DropdownModule,
+    CalendarModule,
+    InputTextareaModule,
+    InputTextModule,
+    PaginatorModule
   ],
   providers: [MessageService]
 })

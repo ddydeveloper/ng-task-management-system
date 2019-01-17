@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using api_task_management.Dtos;
+using api_task_management.Hubs;
 using api_task_management.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace api_task_management.Controllers
 {
@@ -12,33 +13,42 @@ namespace api_task_management.Controllers
     {
         private readonly ITasksService _tasksService;
 
-        public TasksController(ITasksService tasksService)
+        private readonly IHubContext<NotificationsHub, INotificationsHub> _hubContext;
+
+        public TasksController(ITasksService tasksService, IHubContext<NotificationsHub, INotificationsHub> hubContext)
         {
             _tasksService = tasksService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<TaskDto>> GetTasksAsync(int? status, int skip, int take)
+        public async Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take)
         {
             return await _tasksService.GetTasksAsync(status, skip, take);
         }
 
-        [HttpGet("count")]
-        public async Task<int> GetTasksCountAsync(int? status)
+        [HttpGet("{id}/number")]
+        public async Task<int?> GetTaskRowNumberAsync(int id, int? status)
         {
-            return await _tasksService.GetTasksCountAsync(status);
+            return await _tasksService.GetTaskRowNumber(id, status);
         }
 
         [HttpPost]
         public async Task<TaskDto> CreateTaskAsync(TaskDto dto)
         {
-            return await _tasksService.CreateTaskAsync(dto);
+            dto = await _tasksService.CreateTaskAsync(dto);
+            await _hubContext.Clients.All.TaskCreated(dto);
+
+            return dto;
         }
 
         [HttpPut("{id}")]
         public async Task<TaskDto> UpdateTaskAsync(int id, TaskDto dto)
         {
-            return await _tasksService.UpdateTaskAsync(dto);
+            dto = await _tasksService.UpdateTaskAsync(dto);
+            await _hubContext.Clients.All.TaskUpdated(dto);
+
+            return dto;
         }
     }
 }

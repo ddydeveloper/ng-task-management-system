@@ -1,3 +1,78 @@
-<p>
-  task-add works!
-</p>
+<div>
+  <div>
+      <p></p>
+      <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+        <p-panel header="Validate">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        Name *:
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <input pInputText type="text" formControlName="name" [(ngModel)]="name"/>
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <p-message severity="error" text="Name field is required" *ngIf="!taskForm.controls['name'].valid && (taskForm.controls['name'].dirty || taskForm.controls['name'].pristine)"></p-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        Description:
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <textarea pInputTextarea type="text" formControlName="description" [(ngModel)]="description" ></textarea>
+                    </div>
+                    <div class="ui-grid-col-4"></div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        Complete before *:
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-calendar [(ngModel)]="completed" formControlName="completed" [showTime]="true"></p-calendar>
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <p-message severity="error" text="Complete before field is required" *ngIf="!taskForm.controls['completed'].valid && (taskForm.controls['completed'].dirty || taskForm.controls['completed'].pristine)"></p-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2">
+                        Priority *:
+                    </div>
+                    <div class="ui-grid-col-6">
+                        <p-dropdown [options]="priorities" [(ngModel)]="priority" formControlName="priority" [autoWidth]="false"></p-dropdown>
+                    </div>
+                    <div class="ui-grid-col-4">
+                        <p-message severity="error" text="Priority field is required" *ngIf="!taskForm.controls['priority'].valid && (taskForm.controls['priority'].dirty || taskForm.controls['priority'].pristine)"></p-message>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-2"></div>
+                    <div class="ui-grid-col-6">
+                        <button pButton type="submit" label="Submit" [disabled]="!taskForm.valid"></button>
+                    </div>
+                    <div class="ui-grid-col-4"></div>
+                </div>
+            </div>
+        </p-panel>
+    </form>
+  </div>
+
+  <p-dialog header="Confirmation" 
+          [(visible)]="showDialog" 
+          [modal]="true" 
+          [responsive]="true" 
+          [baseZIndex]="10000">
+      <span>
+          Are you sure want to create a new task?<br/>
+          Please click on "OK" button to confirm operation.<br/>
+          Click on "Cancel" button to close the dialog.
+      </span>
+      <p-footer>
+          <button type="button" pButton (click)="confirmDialog()" label="OK"></button>
+          <button type="button" pButton (click)="showDialog = false" label="Cancel" class="ui-button-secondary"></button>
+      </p-footer>
+  </p-dialog>
+
+  <p-toast></p-toast>
+</div>
