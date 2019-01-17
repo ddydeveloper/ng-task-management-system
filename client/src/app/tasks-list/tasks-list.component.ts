@@ -70,6 +70,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
   refreshData(): void {
     this.first = 0;
     this.onRowUnselect();
+
     this.loadData();
   }
 
@@ -187,13 +188,15 @@ export class TasksListComponent implements OnInit, OnDestroy {
             : this.taskApi.getTasksRowNumber(taskId);
 
         obs.subscribe((row: number) => {
-          // if (row > 10) {
-          //   this.skip = row > 10 ? row - 10 : row;
-          // }
+          if (row > this.rows) {
+            this.first = Math.trunc(row / this.rows) * this.rows;
+          }
 
+          this.loadData();
           this.isInitialized = true;
         });
       } else {
+        this.loadData();
         this.isInitialized = true;
       }
     });
@@ -292,8 +295,6 @@ export class TasksListComponent implements OnInit, OnDestroy {
         });
       }
     });
-
-    this.loadData();
 
     this.loading = true;
   }
