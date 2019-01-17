@@ -1,18 +1,17 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { TasksApi } from "../_services/tasks.api";
 import { interval } from "rxjs";
 import TaskViewModel from "../_models/task.view-model";
 import TaskModel from "../_models/task.model";
 import { getDateDiffInSeconds, secondsToText } from "../_helpers/date.helper";
 import * as moment from "moment";
-import { LazyLoadEvent, MessageService, SelectItem } from "primeng/api";
+import { MessageService, SelectItem } from "primeng/api";
 import { ETaskStatus } from "../_enums/task-status.enum";
 import { ActivatedRoute, Router } from "@angular/router";
 import TaskSetModel from "../_models/task-set.model";
 import { HubConnection } from "@aspnet/signalr";
 import { environment } from "src/environments/environment";
 import * as signalR from "@aspnet/signalr";
-import { closestNext } from "../_helpers/number.helper";
 import { ETaskPriority } from "../_enums/task-priority.enum";
 import {
   DarkedRedHex,
@@ -39,14 +38,13 @@ export class TasksListComponent implements OnInit, OnDestroy {
   pollingTasks: any;
 
   cols = [
-    { field: "name", header: "Name", width: "36.7%", sortable: true },
+    { field: "name", header: "Name", width: "40.4%", sortable: true },
     { field: "priority", header: "Priority", width: "15%", sortable: true },
-    { field: "added", header: "Added", width: "15%", sortable: false },
-    { field: "completed", header: "Deadline", width: "15%", sortable: false },
+    { field: "added", header: "Added", width: "20%", sortable: false },
     {
       field: "timeToComplete",
       header: "Time to complete",
-      width: "15%",
+      width: "20%",
       sortable: false
     }
   ];
@@ -62,6 +60,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
   totalTasks: number;
   loading: boolean;
   selectedTask: TaskViewModel = null;
+  modifiedTaskId: number = null;
 
   statuses: SelectItem[] = [
     { label: "All", value: null },
@@ -117,6 +116,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
   onPageChanged(event: any): void {
     this.first = event.first;
     this.rows = event.rows;
+    this.onRowUnselect();
 
     this.loadData();
   }
@@ -125,9 +125,21 @@ export class TasksListComponent implements OnInit, OnDestroy {
     this.loadData();
   }
 
-  closeDialog(): void {
-    this.showCompleteDialog = false;
-    this.showDeleteDialog = false;
+  openDialog(taskId: number, isDelete: boolean = true): void {
+    this.modifiedTaskId = taskId;
+    if (isDelete) {
+      this.showDeleteDialog = true;
+    } else {
+      this.showCompleteDialog = true;
+    }
+  }
+
+  closeDialog(isDelete: boolean = true): void {
+    if (isDelete) {
+      this.showDeleteDialog = false;
+    } else {
+      this.showCompleteDialog = false;
+    }
   }
 
   confirmCompleteDialog(): void {
@@ -139,24 +151,28 @@ export class TasksListComponent implements OnInit, OnDestroy {
   }
 
   onRowSelect(): void {
+    this.initialTaskId = this.selectedTask.id;
+
     const idx = this.router.url.indexOf("tasks");
     const route = this.router.url.substring(0, idx + 5);
+
     window.history.replaceState({}, "", `${route}/${this.selectedTask.id}`);
   }
 
   onRowUnselect(): void {
+    this.initialTaskId = null;
+
     const idx = this.router.url.indexOf("tasks");
     const route = this.router.url.substring(0, idx + 5);
+
     window.history.replaceState({}, "", `${route}`);
   }
 
   updateTaskStatus(status: ETaskStatus): void {
-    const updated = Object.assign({}, this.selectedTask);
+    const updated = Object.assign({}, this.tasks.find((t) => t.id === this.modifiedTaskId));
     updated.status = status;
     this.taskApi.updateTask(updated).subscribe(
-      () => {
-        this.loadData();
-      },
+      () => { },
       () => {
         this.messageService.add({
           severity: "error",
@@ -196,7 +212,6 @@ export class TasksListComponent implements OnInit, OnDestroy {
         if (this.initialTaskId) {
           const selected = this.tasks.find(t => t.id === this.initialTaskId);
           this.selectedTask = selected ? selected : null;
-          this.initialTaskId = null;
         }
 
         this.loading = false;
@@ -240,7 +255,11 @@ export class TasksListComponent implements OnInit, OnDestroy {
           }
 
           if (row > this.rows) {
-            this.first = Math.trunc(row / this.rows) * this.rows;
+            const page = row % this.rows === 0
+              ? (row / this.rows) - 1
+              : Math.floor(row / this.rows);
+
+            this.first = page * this.rows;
           }
 
           this.loadData();
@@ -271,34 +290,17 @@ export class TasksListComponent implements OnInit, OnDestroy {
     this.hubConnection.start();
 
     this.hubConnection.on("TaskCreated", (t: TaskModel) => {
-      debugger;
-      if (this.selectedStatus !== ETaskStatus.Completed) {
-        const last = this.tasks[this.tasks.length - 1];
-        if (t.id === last.id + 1) {
-          this.tasks.push(new TaskViewModel(t));
-        }
-      }
-
       this.messageService.add({
         severity: "success",
         summary: "Task created",
         detail: `A new task "${t.name}" was created`
       });
+
+      this.loadData();
     });
 
     this.hubConnection.on("TaskUpdated", (t: TaskModel) => {
-      debugger;
       if (t.status === ETaskStatus.Archived) {
-        const deleted = this.tasks.find(task => task.id === t.id);
-        if (deleted) {
-          if (this.selectedTask === deleted) {
-            this.selectedTask = null;
-          }
-
-          const idx = this.tasks.indexOf(deleted);
-          this.tasks.splice(idx, 1);
-        }
-
         this.messageService.add({
           severity: "success",
           summary: "Task deleted",
@@ -307,46 +309,14 @@ export class TasksListComponent implements OnInit, OnDestroy {
       }
 
       if (t.status === ETaskStatus.Completed) {
-        if (this.selectedStatus === null) {
-          const updated = this.tasks.find(task => task.id === t.id);
-          if (updated) {
-            const indexOf = this.tasks.indexOf(updated);
-            const replace = new TaskViewModel(t);
-            this.tasks[indexOf] = replace;
-
-            if (updated === this.selectedTask) {
-              this.selectedTask = replace;
-            }
-          }
-        }
-
-        if (this.selectedStatus === ETaskStatus.Active) {
-          const deleted = this.tasks.find(task => task.id === t.id);
-          if (deleted) {
-            if (this.selectedTask === deleted) {
-              this.selectedTask = null;
-            }
-
-            const idx = this.tasks.indexOf(deleted);
-            this.tasks.splice(idx, 1);
-          }
-        }
-
-        if (this.selectedStatus === ETaskStatus.Completed) {
-          const next = closestNext(this.tasks.map(task => task.id), t.id);
-          if (next) {
-            const nextTask = this.tasks.find(task => task.id === next);
-            const idx = this.tasks.indexOf(nextTask);
-            this.tasks.splice(idx, 0, new TaskViewModel(t));
-          }
-        }
-
         this.messageService.add({
           severity: "success",
           summary: "Task completed",
           detail: `A task "${t.name}" was completed`
         });
       }
+
+      this.loadData();
     });
 
     this.loading = true;

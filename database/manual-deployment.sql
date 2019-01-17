@@ -55,7 +55,7 @@ DECLARE @Idx            INT = 0,
 
 WHILE @Idx >= 0 AND @Idx <= 100000
 BEGIN
-    SELECT @RandomDate = ROUND(((10 - 1) * RAND()), 0),
+    SELECT @RandomDate = ROUND(((6 - 1) * RAND()), 0),
            @RandomStatus = ROUND(((2 - 1) * RAND()), 0),
            @RandomPriority = ROUND(((6 - 1) * RAND()), 0)
 
@@ -73,12 +73,10 @@ BEGIN
         N'The following task has ' + CAST(@Idx AS NVARCHAR(6)) + N' number follow the complete date to define time to complete added ' + CAST(@Added AS NVARCHAR(20)),
         @Added,
         CASE
-            WHEN @Idx > 1     AND @Idx <= 10000 THEN DATEADD(second, @RandomDate * 5,  @Added)
-            WHEN @Idx > 10000 AND @Idx <= 20000 THEN DATEADD(second, @RandomDate * 10, @Added)
-            WHEN @Idx > 20000 AND @Idx <= 30000 THEN DATEADD(minute, @RandomDate * 5,  @Added)
-            WHEN @Idx > 30000 AND @Idx <= 40000 THEN DATEADD(minute, @RandomDate * 10, @Added)
-            WHEN @Idx > 40000 AND @Idx <= 60000 THEN DATEADD(hour,   @RandomDate,      @Added)
-            WHEN @Idx > 60000 AND @Idx <= 80000 THEN DATEADD(hour,   @RandomDate * 2,  @Added)
+            WHEN @Idx > 1     AND @Idx <= 20000 THEN DATEADD(second, @RandomDate * 100, @Added)
+            WHEN @Idx > 20000 AND @Idx <= 40000 THEN DATEADD(minute, @RandomDate * 10,  @Added)
+            WHEN @Idx > 40000 AND @Idx <= 60000 THEN DATEADD(hour,   @RandomDate,       @Added)
+            WHEN @Idx > 60000 AND @Idx <= 80000 THEN DATEADD(hour,   @RandomDate * 2,   @Added)
             ELSE DATEADD(day, @RandomDate, @Added)
         END,
         @RandomPriority,

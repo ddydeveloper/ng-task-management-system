@@ -40,11 +40,26 @@
                         <td class="ui-resizable-column">{{task.name}}</td>
                         <td class="ui-resizable-column" [ngStyle]="getPriorityStyle(task.priority)">{{task.priority | priority}}</td>
                         <td class="ui-resizable-column">{{task.added | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
-                        <td class="ui-resizable-column">{{task.completed | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
                         <td class="ui-resizable-column" [ngStyle]="getTimeToCompleteStyle(task)">{{task.timeToCompleteText}}</td>
                         <td class="ui-resizable-column">
-                            <i *ngIf="task.isActive" class="pi pi-check complete-icon" pTooltip="Complete task" tooltipPosition="top" (click)="showCompleteDialog = true"></i>
-                            <i *ngIf="!task.isActive" class="pi pi-trash delete-icon" pTooltip="Delete task" tooltipPosition="top" (click)="showDeleteDialog = true"></i>
+                            <button *ngIf="task.isActive" 
+                                    pButton 
+                                    style="height: 24px;" 
+                                    pTooltip="Complete task" 
+                                    tooltipPosition="top" 
+                                    class="ui-button-success" 
+                                    icon="pi pi-check"
+                                    (click)="openDialog(task.id, false)">
+                            </button>
+                            <button *ngIf="!task.isActive" 
+                                    pButton 
+                                    style="height: 24px;" 
+                                    pTooltip="Delete task" 
+                                    tooltipPosition="top" 
+                                    class="ui-button-danger" 
+                                    icon="pi pi-trash"
+                                    (click)="openDialog(task.id)">
+                            </button>
                         </td>
                     </tr>
                 </ng-template>
@@ -96,7 +111,7 @@
         </span>
         <p-footer>
             <button type="button" pButton (click)="confirmCompleteDialog()" label="OK"></button>
-            <button type="button" pButton (click)="closeDialog()" label="Cancel" class="ui-button-secondary"></button>
+            <button type="button" pButton (click)="closeDialog(false)" label="Cancel" class="ui-button-secondary"></button>
         </p-footer>
     </p-dialog>
 
