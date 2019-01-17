@@ -83,14 +83,16 @@ export class TasksListComponent implements OnInit, OnDestroy {
     this.updateTaskStatus(ETaskStatus.Archived);
   }
 
-  onRowSelect(event: any): void {
-    debugger;
-    window.history.replaceState({}, "", `${this.router.url}/${this.selectedTask.id}`);
+  onRowSelect(): void {
+    const idx = this.router.url.indexOf("tasks");
+    const route = this.router.url.substring(0, idx + 5);
+    window.history.replaceState({}, "", `${route}/${this.selectedTask.id}`);
   }
 
-  onRowUnselect(event: any): void {
-    debugger;
-    window.history.replaceState({}, "", `${this.router.url}`);
+  onRowUnselect(): void {
+    const idx = this.router.url.indexOf("tasks");
+    const route = this.router.url.substring(0, idx + 5);
+    window.history.replaceState({}, "", `${route}`);
   }
 
   updateTaskStatus(status: ETaskStatus): void {

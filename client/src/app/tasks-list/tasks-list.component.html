@@ -16,8 +16,8 @@
                 [resizableColumns]="true"
                 [value]="tasks" 
                 [(selection)]="selectedTask"
-                (onRowSelect)="onRowSelect($event)" 
-                (onRowUnselect)="onRowUnselect($event)"
+                (onRowSelect)="onRowSelect()" 
+                (onRowUnselect)="onRowUnselect()"
                 [scrollable]="true">
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>

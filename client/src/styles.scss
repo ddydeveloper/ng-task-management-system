@@ -18,8 +18,14 @@
 
 .complete-icon:hover {
   color: #006400;
+  cursor: pointer;
 }
 
 .delete-icon:hover {
   color: #8B0000;
+  cursor: pointer;
+}
+
+.ui-table-scrollable-header-box {
+  margin-right: 1.8vh !important;
 }
