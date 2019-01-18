@@ -34,7 +34,7 @@ This project consist of the following parts:
 ## Docker flow (preferred way)
 
 To set up a project:
-  - Make sure you have a [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows) installed on your local machine
+  - Make sure you have [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows) installed on your local machine
   - Clone the repository, [github desktop](https://desktop.github.com/) can be used
   - Choose the master branch
   - Use CLI and go to a root directory (should contains docker-compose file)
