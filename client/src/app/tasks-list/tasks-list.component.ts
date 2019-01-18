@@ -5,7 +5,12 @@ import TaskViewModel from "../_models/task.view-model";
 import TaskModel from "../_models/task.model";
 import { getDateDiffInSeconds, secondsToText } from "../_helpers/date.helper";
 import * as moment from "moment";
-import { MessageService, SelectItem, ConfirmationService } from "primeng/api";
+import {
+  MessageService,
+  SelectItem,
+  ConfirmationService,
+  SortEvent
+} from "primeng/api";
 import { ETaskStatus } from "../_enums/task-status.enum";
 import { ActivatedRoute, Router } from "@angular/router";
 import TaskSetModel from "../_models/task-set.model";
@@ -45,9 +50,15 @@ export class TasksListComponent implements OnInit, OnDestroy {
     { field: "priority", header: "Priority", width: "15%", sortable: true },
     { field: "added", header: "Added", width: "15%", sortable: false },
     {
+      field: "completed",
+      header: "Date to complete",
+      width: "15%",
+      sortable: true
+    },
+    {
       field: "timeToComplete",
       header: "Time to complete",
-      width: "20%",
+      width: "15%",
       sortable: false
     }
   ];
@@ -73,6 +84,9 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
   first = 0;
   rows = 15;
+  orderBy: string = null;
+  isDesc = false;
+
   rowsPerPageOptions = [15, 30, 100, 500, 1000];
 
   getPriorityStyle(priority: ETaskPriority): any {
@@ -143,7 +157,8 @@ export class TasksListComponent implements OnInit, OnDestroy {
   onPageChanged(event: any): void {
     this.first = event.first;
     this.rows = event.rows;
-    this.onRowUnselect();
+    this.orderBy = event.sortField;
+    this.isDesc = event.sortOrder === -1 ? true : false;
 
     this.loadData();
   }
@@ -217,9 +232,16 @@ export class TasksListComponent implements OnInit, OnDestroy {
         ? this.taskApi.getTasksByStatus(
             this.selectedStatus,
             this.first,
-            this.rows
+            this.rows,
+            this.orderBy,
+            this.isDesc
           )
-        : this.taskApi.getAllTasks(this.first, this.rows);
+        : this.taskApi.getAllTasks(
+            this.first,
+            this.rows,
+            this.orderBy,
+            this.isDesc
+          );
 
     obs.subscribe(
       (result: TaskSetModel) => {

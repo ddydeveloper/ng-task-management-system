@@ -83,30 +83,40 @@ END
 GO
 CREATE PROCEDURE [dbo].[GetAllTasks]
 (
-    @Skip   INT,
-    @Take	INT
+    @Skip	 INT,
+    @Take	 INT,
+	@OrderBy NVARCHAR(20) = N'Id',
+	@IsDesc  BIT		  = 0
 )
 AS
 BEGIN
-    DECLARE @SQL NVARCHAR(MAX)
+    DECLARE @SQL		 NVARCHAR(MAX),
+			@OrderClause NVARCHAR(20) = @OrderBy + ' ASC'
+		
+	IF (@IsDesc = 1) SET @OrderClause = @OrderBy + ' DESC'
 
-    SET @SQL = 'SELECT *FROM [dbo].[Tasks] WHERE [Status] <> 2 ORDER BY [Id] OFFSET ' + CAST(@Skip AS VARCHAR(10)) + ' ROWS FETCH NEXT ' + CAST(@Take AS VARCHAR(10)) + ' ROWS ONLY'
+    SET @SQL = 'SELECT *FROM [dbo].[Tasks] WHERE [Status] <> 2 ORDER BY ' + @OrderClause + ' OFFSET ' + CAST(@Skip AS VARCHAR(10)) + ' ROWS FETCH NEXT ' + CAST(@Take AS VARCHAR(10)) + ' ROWS ONLY'
     EXEC sp_ExecuteSQL @SQL
 END
 GO
 
 CREATE PROCEDURE [dbo].[GetTasksByStatus]
 (
-    @Status TINYINT,
-    @Skip   INT,
-    @Take	INT
+    @Status  TINYINT,
+    @Skip    INT,
+    @Take	 INT,
+	@OrderBy NVARCHAR(20) = N'Id',
+	@IsDesc  BIT		  = 0
 )
 AS
 BEGIN
 
-    DECLARE @SQL NVARCHAR(MAX)
+    DECLARE @SQL         NVARCHAR(MAX),
+			@OrderClause NVARCHAR(20) = @OrderBy + ' ASC'
     
-    SET @SQL = 'SELECT *FROM [dbo].[Tasks] WHERE [Status] = @Status ORDER BY [Id] OFFSET ' + CAST(@Skip AS VARCHAR(10)) + ' ROWS FETCH NEXT ' + CAST(@Take AS VARCHAR(10)) + ' ROWS ONLY'
+    IF (@IsDesc = 1) SET @OrderClause = @OrderBy + ' DESC'
+
+    SET @SQL = 'SELECT *FROM [dbo].[Tasks] WHERE [Status] = @Status ORDER BY ' + @OrderClause + ' OFFSET ' + CAST(@Skip AS VARCHAR(10)) + ' ROWS FETCH NEXT ' + CAST(@Take AS VARCHAR(10)) + ' ROWS ONLY'
     EXEC sp_ExecuteSQL @SQL, N'@Status TINYINT', @Status
 
 END

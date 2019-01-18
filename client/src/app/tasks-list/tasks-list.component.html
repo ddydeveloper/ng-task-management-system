@@ -15,24 +15,27 @@
                     [value]="tasks" 
                     [(selection)]="selectedTask"
                     (onRowSelect)="onRowSelect()" 
-                    (onRowUnselect)="onRowUnselect()">
+                    (onRowUnselect)="onRowUnselect()"
+                    [rowsPerPageOptions]="rowsPerPageOptions"
+                    pageLinks="15"
+                    [lazy]="true" 
+                    (onLazyLoad)="onPageChanged($event)"
+                    [paginator]="true"
+                    [totalRecords]="totalTasks" 
+                    [first]="first">
                 <ng-template pTemplate="colgroup" let-columns>
                     <colgroup>
                         <col *ngFor="let col of columns" [style.width]="col.width">
-                        <col [style.width]="'8%'">
+                        <col [style.width]="'7%'">
                     </colgroup>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.sortable ? col.field : null" pResizableColumn>
                             {{col.header}}
-                            <p-sortIcon *ngIf="col.sortable" [field]="col.field" 
-                                ariaLabel="Activate to sort" 
-                                ariaLabelDesc="Activate to sort in descending order" 
-                                ariaLabelAsc="Activate to sort in ascending order">
-                            </p-sortIcon>
+                            <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
                         </th>
-                        <th>Actions</th>
+                        <th [pSortableColumn]="null">Actions</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-task>
@@ -40,6 +43,7 @@
                         <td class="ui-resizable-column">{{task.name}}</td>
                         <td class="ui-resizable-column" [ngStyle]="getPriorityStyle(task.priority)">{{task.priority | priority}}</td>
                         <td class="ui-resizable-column">{{task.added | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
+                        <td class="ui-resizable-column">{{task.completed | date: 'dd/MM/yyyy hh:mm:ss'}}</td>
                         <td class="ui-resizable-column" [ngStyle]="getTimeToCompleteStyle(task)">{{task.timeToCompleteText}}</td>
                         <td class="ui-resizable-column">
                             <button *ngIf="task.isActive" 
@@ -65,7 +69,6 @@
                 </ng-template>
             </p-table>
         </div>
-        <p-paginator [rows]="15" [rowsPerPageOptions]="rowsPerPageOptions" pageLinkSize="10" [totalRecords]="totalTasks" [first]="first" (onPageChange)="onPageChanged($event)"></p-paginator>
 
         <p></p>
         <p-fieldset class="details-fieldset" *ngIf="selectedTask !== null" legend="Task details"

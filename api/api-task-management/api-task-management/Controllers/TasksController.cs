@@ -22,9 +22,9 @@ namespace api_task_management.Controllers
         }
 
         [HttpGet]
-        public async Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take)
+        public async Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take, string orderBy, bool isDesc)
         {
-            return await _tasksService.GetTasksAsync(status, skip, take);
+            return await _tasksService.GetTasksAsync(status, skip, take, orderBy, isDesc);
         }
 
         [HttpGet("{id}/number")]

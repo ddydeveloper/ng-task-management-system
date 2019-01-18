@@ -5,7 +5,7 @@ namespace api_task_management.Services
 {
     public interface ITasksService
     {
-        Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take);
+        Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take, string orderBy, bool isDesc);
 
         Task<int?> GetTaskRowNumber(int taskId, int? status);
 

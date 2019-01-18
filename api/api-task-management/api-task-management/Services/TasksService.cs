@@ -18,7 +18,7 @@ namespace api_task_management.Services
             _connectionStrings = connectionStrings.Value;
         }
 
-        public async Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take)
+        public async Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take, string orderBy, bool isDesc)
         {
             IEnumerable<TaskDto> tasks;
             int totalCount;
@@ -31,6 +31,12 @@ namespace api_task_management.Services
                 var tasksParam = new DynamicParameters();
                 tasksParam.Add("@Skip", skip, DbType.Int32, ParameterDirection.Input);
                 tasksParam.Add("@Take", take, DbType.Int32, ParameterDirection.Input);
+                tasksParam.Add("@IsDesc", isDesc, DbType.Boolean, ParameterDirection.Input);
+
+                if (!string.IsNullOrWhiteSpace(orderBy))
+                {
+                    tasksParam.Add("@OrderBy", orderBy, DbType.String, ParameterDirection.Input);
+                }
 
                 DynamicParameters countParam = null;
 
