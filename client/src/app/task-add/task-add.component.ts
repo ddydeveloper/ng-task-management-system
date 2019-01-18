@@ -5,7 +5,7 @@ import {
   FormControl,
   Validators
 } from "@angular/forms";
-import { MessageService } from "primeng/api";
+import { MessageService, ConfirmationService } from "primeng/api";
 import { TasksApi } from "../_services/tasks.api";
 import { ETaskPriority } from "../_enums/task-priority.enum";
 import TaskModel from "../_models/task.model";
@@ -32,22 +32,26 @@ export class TaskAddComponent implements OnInit {
     value: ETaskPriority[key]
   }));
 
-  showDialog = false;
-
   constructor(
     private fb: FormBuilder,
     private messageService: MessageService,
     private tasksApi: TasksApi,
-    private router: Router
+    private router: Router,
+    private confirmationService: ConfirmationService
   ) {}
 
   onSubmit(): void {
-    this.showDialog = true;
+    this.confirmationService.confirm({
+      message: "Are you sure want to create a new task?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.confirm();
+      }
+    });
   }
 
-  confirmDialog(): void {
-    this.showDialog = false;
-
+  confirm(): void {
     const added: TaskModel = {
       id: -1,
       name: this.name,
@@ -80,7 +84,10 @@ export class TaskAddComponent implements OnInit {
 
   ngOnInit() {
     this.taskForm = this.fb.group({
-      name: new FormControl("", Validators.compose([Validators.required, Validators.maxLength(100)])),
+      name: new FormControl(
+        "",
+        Validators.compose([Validators.required, Validators.maxLength(100)])
+      ),
       description: new FormControl("", Validators.maxLength(500)),
       completed: new FormControl("", Validators.required),
       priority: new FormControl("", Validators.required)

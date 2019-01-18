@@ -19,7 +19,7 @@
                 <ng-template pTemplate="colgroup" let-columns>
                     <colgroup>
                         <col *ngFor="let col of columns" [style.width]="col.width">
-                        <col>
+                        <col [style.width]="'8%'">
                     </colgroup>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
@@ -32,7 +32,7 @@
                                 ariaLabelAsc="Activate to sort in ascending order">
                             </p-sortIcon>
                         </th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-task>
@@ -99,37 +99,7 @@
         </p-fieldset>
     </div>
 
-    <p-dialog header="Confirmation" 
-            [(visible)]="showCompleteDialog" 
-            [modal]="true" 
-            [responsive]="true" 
-            [baseZIndex]="10000">
-        <span>
-            Are you sure want to complete the selected task?<br/>
-            Please click on "OK" button to confirm operation.<br/>
-            Click on "Cancel" button to close the dialog.
-        </span>
-        <p-footer>
-            <button type="button" pButton (click)="confirmCompleteDialog()" label="OK"></button>
-            <button type="button" pButton (click)="closeDialog(false)" label="Cancel" class="ui-button-secondary"></button>
-        </p-footer>
-    </p-dialog>
-
-    <p-dialog header="Confirmation"
-            [(visible)]="showDeleteDialog"
-            [modal]="true"
-            [responsive]="true"
-            [baseZIndex]="10000">
-        <span>
-            Are you sure want to delete the selected task?<br/>
-            Please click on "OK" button to confirm operation.<br/>
-            Click on "Cancel" button to close the dialog. 
-        </span>
-        <p-footer>
-            <button type="button" pButton (click)="confirmDeleteDialog()" label="OK"></button>
-            <button type="button" pButton (click)="closeDialog()" label="Cancel" class="ui-button-secondary"></button>
-        </p-footer>
-    </p-dialog>
+    <p-confirmDialog [style]="{width: '425px'}"></p-confirmDialog>
 
     <p-toast></p-toast>
 </div>

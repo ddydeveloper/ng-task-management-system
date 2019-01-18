@@ -5,7 +5,7 @@ import TaskViewModel from "../_models/task.view-model";
 import TaskModel from "../_models/task.model";
 import { getDateDiffInSeconds, secondsToText } from "../_helpers/date.helper";
 import * as moment from "moment";
-import { MessageService, SelectItem } from "primeng/api";
+import { MessageService, SelectItem, ConfirmationService } from "primeng/api";
 import { ETaskStatus } from "../_enums/task-status.enum";
 import { ActivatedRoute, Router } from "@angular/router";
 import TaskSetModel from "../_models/task-set.model";
@@ -17,7 +17,9 @@ import {
   DarkedRedHex,
   DangerHex,
   WarningHex,
-  SuccessHex
+  SuccessHex,
+  LightGrayHex,
+  LightYellowHex
 } from "../_constants/colors.constants";
 import { getTextColor } from "../_helpers/color.helper";
 
@@ -31,16 +33,17 @@ export class TasksListComponent implements OnInit, OnDestroy {
     private taskApi: TasksApi,
     private messageService: MessageService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private confirmationService: ConfirmationService
   ) {}
 
   private hubConnection: HubConnection;
   pollingTasks: any;
 
   cols = [
-    { field: "name", header: "Name", width: "40.4%", sortable: true },
+    { field: "name", header: "Name", width: null, sortable: true },
     { field: "priority", header: "Priority", width: "15%", sortable: true },
-    { field: "added", header: "Added", width: "20%", sortable: false },
+    { field: "added", header: "Added", width: "15%", sortable: false },
     {
       field: "timeToComplete",
       header: "Time to complete",
@@ -53,8 +56,6 @@ export class TasksListComponent implements OnInit, OnDestroy {
   private initialTaskId: number;
 
   isInitialized = false;
-  showCompleteDialog = false;
-  showDeleteDialog = false;
 
   tasks: TaskViewModel[] = [];
   totalTasks: number;
@@ -76,15 +77,35 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
   getPriorityStyle(priority: ETaskPriority): any {
     if (priority === ETaskPriority.Blocker) {
-      return { "background-color": DarkedRedHex, "color": getTextColor(DarkedRedHex) };
+      return {
+        "background-color": DarkedRedHex,
+        color: getTextColor(DarkedRedHex)
+      };
     }
 
     if (priority === ETaskPriority.Highest) {
-      return { "background-color": DangerHex, "color": getTextColor(DangerHex) };
+      return { "background-color": DangerHex, color: getTextColor(DangerHex) };
     }
 
     if (priority === ETaskPriority.High) {
-      return { "background-color": WarningHex, "color": getTextColor(WarningHex) };
+      return {
+        "background-color": WarningHex,
+        color: getTextColor(WarningHex)
+      };
+    }
+
+    if (priority === ETaskPriority.Minor) {
+      return {
+        "background-color": LightGrayHex,
+        color: getTextColor(LightGrayHex)
+      };
+    }
+
+    if (priority === ETaskPriority.Medium) {
+      return {
+        "background-color": LightYellowHex,
+        color: getTextColor(LightYellowHex)
+      };
     }
 
     return null;
@@ -92,15 +113,21 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
   getTimeToCompleteStyle(task: TaskViewModel): any {
     if (task.status === ETaskStatus.Completed) {
-      return { "background-color": SuccessHex, "color": getTextColor(SuccessHex) };
+      return {
+        "background-color": SuccessHex,
+        color: getTextColor(SuccessHex)
+      };
     }
 
     if (task.timeToComplete < 0) {
-      return { "background-color": DangerHex, "color": getTextColor(DangerHex) };
+      return { "background-color": DangerHex, color: getTextColor(DangerHex) };
     }
 
     if (task.timeToComplete < 60 * 60) {
-      return { "background-color": WarningHex, "color": getTextColor(WarningHex) };
+      return {
+        "background-color": WarningHex,
+        color: getTextColor(WarningHex)
+      };
     }
 
     return null;
@@ -127,27 +154,21 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
   openDialog(taskId: number, isDelete: boolean = true): void {
     this.modifiedTaskId = taskId;
-    if (isDelete) {
-      this.showDeleteDialog = true;
-    } else {
-      this.showCompleteDialog = true;
-    }
-  }
 
-  closeDialog(isDelete: boolean = true): void {
-    if (isDelete) {
-      this.showDeleteDialog = false;
-    } else {
-      this.showCompleteDialog = false;
-    }
-  }
+    const msg = `Are you sure want to ${
+      isDelete ? "delete" : "complete"
+    } a task?`;
 
-  confirmCompleteDialog(): void {
-    this.updateTaskStatus(ETaskStatus.Completed);
-  }
-
-  confirmDeleteDialog(): void {
-    this.updateTaskStatus(ETaskStatus.Archived);
+    this.confirmationService.confirm({
+      message: msg,
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        this.updateTaskStatus(
+          isDelete ? ETaskStatus.Archived : ETaskStatus.Completed
+        );
+      }
+    });
   }
 
   onRowSelect(): void {
@@ -169,10 +190,13 @@ export class TasksListComponent implements OnInit, OnDestroy {
   }
 
   updateTaskStatus(status: ETaskStatus): void {
-    const updated = Object.assign({}, this.tasks.find((t) => t.id === this.modifiedTaskId));
+    const updated = Object.assign(
+      {},
+      this.tasks.find(t => t.id === this.modifiedTaskId)
+    );
     updated.status = status;
     this.taskApi.updateTask(updated).subscribe(
-      () => { },
+      () => {},
       () => {
         this.messageService.add({
           severity: "error",
@@ -181,9 +205,6 @@ export class TasksListComponent implements OnInit, OnDestroy {
         });
       }
     );
-
-    this.showCompleteDialog = false;
-    this.showDeleteDialog = false;
   }
 
   loadData(): void {
@@ -255,9 +276,10 @@ export class TasksListComponent implements OnInit, OnDestroy {
           }
 
           if (row > this.rows) {
-            const page = row % this.rows === 0
-              ? (row / this.rows) - 1
-              : Math.floor(row / this.rows);
+            const page =
+              row % this.rows === 0
+                ? row / this.rows - 1
+                : Math.floor(row / this.rows);
 
             this.first = page * this.rows;
           }

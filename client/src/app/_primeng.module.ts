@@ -5,7 +5,7 @@ import { TableModule } from "primeng/table";
 import { MessagesModule } from "primeng/messages";
 import { MessageModule } from "primeng/message";
 import { ToastModule } from "primeng/toast";
-import { MessageService } from "primeng/api";
+import { MessageService, ConfirmationService } from "primeng/api";
 import { PanelModule } from "primeng/panel";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FieldsetModule } from "primeng/fieldset";
@@ -17,6 +17,7 @@ import { CalendarModule } from "primeng/calendar";
 import { InputTextareaModule } from "primeng/inputtextarea";
 import { InputTextModule } from "primeng/inputtext";
 import { PaginatorModule } from "primeng/paginator";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { PaginatorModule } from "primeng/paginator";
     CalendarModule,
     InputTextareaModule,
     InputTextModule,
-    PaginatorModule
+    PaginatorModule,
+    ConfirmDialogModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -54,8 +56,9 @@ import { PaginatorModule } from "primeng/paginator";
     CalendarModule,
     InputTextareaModule,
     InputTextModule,
-    PaginatorModule
+    PaginatorModule,
+    ConfirmDialogModule
   ],
-  providers: [MessageService]
+  providers: [MessageService, ConfirmationService]
 })
 export class PrimengModule {}
