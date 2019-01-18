@@ -11,7 +11,6 @@ import { ETaskPriority } from "../_enums/task-priority.enum";
 import TaskModel from "../_models/task.model";
 import { ETaskStatus } from "../_enums/task-status.enum";
 import { Router } from "@angular/router";
-import * as moment from "moment";
 import { EnumValues } from "enum-values";
 
 @Component({
@@ -70,7 +69,7 @@ export class TaskAddComponent implements OnInit {
           detail: `A new task ${t.name} was created`
         });
 
-        setTimeout(() => this.router.navigate([`/tasks/${t.id}`]), 1000);
+        setTimeout(() => this.router.navigate([`/tasks/${t.id}`]), 200);
       },
       () => {
         this.messageService.add({
