@@ -286,7 +286,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
             });
           }
 
-          if (this.initialTaskId) {
+          if (!isNaN(this.initialTaskId)) {
             const selected = this.tasks.find(t => t.id === this.initialTaskId);
             this.selectedTask = selected ? selected : null;
           }
@@ -315,8 +315,8 @@ export class TasksListComponent implements OnInit, OnDestroy {
       .subscribe();
 
     this.sub = this.route.params.subscribe(params => {
-      if (!isNaN(parseInt(params["id"], 10))) {
-        const taskId = +params["id"];
+      const taskId = +params["id"];
+      if (!isNaN(taskId)) {
         this.initialTaskId = taskId;
 
         const obs =
@@ -335,7 +335,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
             this.messageService.add({
               severity: "info",
               summary: "Wrong task ID in URL",
-              detail: `There are no tasks with the ID = "${taskId}", the first page was loaded`
+              detail: `There are no tasks with the ID = "${taskId}", the first page is loaded`
             });
           }
 
@@ -351,6 +351,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
           this.isInitialized = true;
         });
       } else {
+        this.onRowUnselect();
         this.isInitialized = true;
       }
     });
