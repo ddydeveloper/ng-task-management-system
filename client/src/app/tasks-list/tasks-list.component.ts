@@ -1,16 +1,18 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ElementRef,
+  ViewChild
+} from "@angular/core";
 import { TasksApi } from "../_services/tasks.api";
-import { interval } from "rxjs";
+import { interval, Observable, fromEvent } from "rxjs";
+import { map, debounceTime, switchMap } from "rxjs/operators";
 import TaskViewModel from "../_models/task.view-model";
 import TaskModel from "../_models/task.model";
 import { getDateDiffInSeconds, secondsToText } from "../_helpers/date.helper";
 import * as moment from "moment";
-import {
-  MessageService,
-  SelectItem,
-  ConfirmationService,
-  SortEvent
-} from "primeng/api";
+import { MessageService, SelectItem, ConfirmationService } from "primeng/api";
 import { ETaskStatus } from "../_enums/task-status.enum";
 import { ActivatedRoute, Router } from "@angular/router";
 import TaskSetModel from "../_models/task-set.model";
@@ -34,6 +36,8 @@ import { getTextColor } from "../_helpers/color.helper";
   styleUrls: ["./tasks-list.component.scss"]
 })
 export class TasksListComponent implements OnInit, OnDestroy {
+  @ViewChild("pageInput") pageInput: ElementRef;
+
   constructor(
     private taskApi: TasksApi,
     private messageService: MessageService,
@@ -229,7 +233,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
     window.history.replaceState({}, "", `${route}`);
   }
 
-  updateTaskStatus(status: ETaskStatus): void {
+  private updateTaskStatus(status: ETaskStatus): void {
     const updated = Object.assign(
       {},
       this.tasks.find(t => t.id === this.modifiedTaskId)
@@ -247,7 +251,11 @@ export class TasksListComponent implements OnInit, OnDestroy {
     );
   }
 
-  loadData(): void {
+  private loadData(): void {
+    this.loadDataObs().subscribe();
+  }
+
+  private loadDataObs(): Observable<void> {
     this.loading = true;
     this.tasks = [];
     this.selectedTask = null;
@@ -268,35 +276,44 @@ export class TasksListComponent implements OnInit, OnDestroy {
             this.isDesc
           );
 
-    obs.subscribe(
-      (result: TaskSetModel) => {
-        this.totalTasks = result.totalCount;
-        if (this.totalTasks > 0) {
-          result.tasks.forEach((t: TaskModel) => {
-            this.tasks.push(new TaskViewModel(t));
+    return obs.pipe(
+      map(
+        (result: TaskSetModel) => {
+          this.totalTasks = result.totalCount;
+          if (this.totalTasks > 0) {
+            result.tasks.forEach((t: TaskModel) => {
+              this.tasks.push(new TaskViewModel(t));
+            });
+          }
+
+          if (this.initialTaskId) {
+            const selected = this.tasks.find(t => t.id === this.initialTaskId);
+            this.selectedTask = selected ? selected : null;
+          }
+
+          this.loading = false;
+        },
+        () => {
+          this.messageService.add({
+            severity: "error",
+            summary: "Task loading error",
+            detail: "An error occured when loading tasks"
           });
+
+          this.loading = false;
         }
-
-        if (this.initialTaskId) {
-          const selected = this.tasks.find(t => t.id === this.initialTaskId);
-          this.selectedTask = selected ? selected : null;
-        }
-
-        this.loading = false;
-      },
-      () => {
-        this.messageService.add({
-          severity: "error",
-          summary: "Task loading error",
-          detail: "An error occured when loading tasks"
-        });
-
-        this.loading = false;
-      }
+      )
     );
   }
 
   ngOnInit() {
+    fromEvent(this.pageInput.nativeElement, "change")
+      .pipe(
+        debounceTime(500),
+        map(() => this.setPage())
+      )
+      .subscribe();
+
     this.sub = this.route.params.subscribe(params => {
       const taskId = +params["id"];
       if (taskId) {

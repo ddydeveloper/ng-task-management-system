@@ -1,14 +1,14 @@
 <div>
-    <div *ngIf="isInitialized">
+    <div>
         <div style="margin-top: 8px;">
             <p-selectButton [options]="statuses" [(ngModel)]="selectedStatus" (onChange)="onStatusChanged()"></p-selectButton>
             <span class="header-info">Page: </span>
-            <input class="header-page"  min="1" type="number" pInputText [(ngModel)]="page" (change)="setPage()"/>
+            <input #pageInput class="header-page"  min="1" type="number" pInputText [(ngModel)]="page"/>
             <span class="header-info">Total tasks: {{totalTasks}}</span>
             <button [style.float]="'right'" type="button" pButton (click)="refreshData()" label="Refresh"></button>
         </div>       
         <p></p>
-        <div class="scrollable-container" style="max-height: 62vh">
+        <div *ngIf="isInitialized" class="scrollable-container" style="max-height: 62vh">
             <p-table selectionMode="single"
                     responsive="true"
                     [rows]="rows"
