@@ -29,9 +29,9 @@ This project consist of the following parts:
   - [Asp.net Core](https://github.com/aspnet/AspNetCore) version 2.1 rest API service
   - MS SQL database provided by latest docker [image](https://hub.docker.com/r/microsoft/mssql-server-linux/).
 
-## Get Started
+# Get Started
 
-# Docker flow (preferred way)
+## Docker flow (preferred way)
 
 To set up a project:
   - Make sure you have a [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows) installed on your local machine
@@ -44,4 +44,4 @@ To set up a project:
   
 Enjoy the app!
 
-# Manual deploy 
+## Manual deploy 
