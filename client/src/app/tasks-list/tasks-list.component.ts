@@ -68,7 +68,8 @@ export class TasksListComponent implements OnInit, OnDestroy {
   ];
 
   private sub: any;
-  private initialTaskId: number;
+  private initialTaskId: number = null;
+  private modifiedTaskId: number = null;
 
   isInitialized = false;
   isFirstPageLoading = true;
@@ -77,7 +78,6 @@ export class TasksListComponent implements OnInit, OnDestroy {
   totalTasks: number;
   loading: boolean;
   selectedTask: TaskViewModel = null;
-  modifiedTaskId: number = null;
 
   statuses: SelectItem[] = [
     { label: "All", value: null },
@@ -315,8 +315,8 @@ export class TasksListComponent implements OnInit, OnDestroy {
       .subscribe();
 
     this.sub = this.route.params.subscribe(params => {
-      const taskId = +params["id"];
-      if (taskId) {
+      if (!isNaN(parseInt(params["id"], 10))) {
+        const taskId = +params["id"];
         this.initialTaskId = taskId;
 
         const obs =
