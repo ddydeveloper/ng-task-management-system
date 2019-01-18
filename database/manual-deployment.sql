@@ -55,7 +55,7 @@ DECLARE @Idx            INT = 0,
 
 WHILE @Idx >= 0 AND @Idx <= 100000
 BEGIN
-    SELECT @RandomDate = ROUND(((6 - 1) * RAND()), 0),
+    SELECT @RandomDate = ROUND(((3600 * 24 * 9 - 1) * RAND()), 0),
            @RandomStatus = ROUND(((2 - 1) * RAND()), 0),
            @RandomPriority = ROUND(((6 - 1) * RAND()), 0)
 
@@ -69,16 +69,10 @@ BEGIN
         [Status]
     )
     VALUES (
-        N'Test task # ' + CAST(@Idx AS NVARCHAR(6)),
-        N'The following task has ' + CAST(@Idx AS NVARCHAR(6)) + N' number follow the complete date to define time to complete added ' + CAST(@Added AS NVARCHAR(20)),
+        N'Internal task #' + CAST(@Idx AS NVARCHAR(6)),
+        N'An internal task for the test purposes only, can be completed, deleted or modified',
         @Added,
-        CASE
-            WHEN @Idx > 1     AND @Idx <= 20000 THEN DATEADD(second, @RandomDate * 100, @Added)
-            WHEN @Idx > 20000 AND @Idx <= 40000 THEN DATEADD(minute, @RandomDate * 10,  @Added)
-            WHEN @Idx > 40000 AND @Idx <= 60000 THEN DATEADD(hour,   @RandomDate,       @Added)
-            WHEN @Idx > 60000 AND @Idx <= 80000 THEN DATEADD(hour,   @RandomDate * 2,   @Added)
-            ELSE DATEADD(day, @RandomDate, @Added)
-        END,
+        DATEADD(second, @RandomDate, @Added),
         @RandomPriority,
         @RandomStatus
     )
