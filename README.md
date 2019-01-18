@@ -37,7 +37,7 @@ To set up a project:
   - Make sure you have [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows) installed on your local machine
   - Clone the repository, [github desktop](https://desktop.github.com/) can be used
   - Choose the master branch
-  - Use CLI and go to a root directory (should contains docker-compose file)
+  - Use CLI and go to a root directory (should contains `docker-compose.yaml` file)
   - Build images with the `docker-compose build -d` command
   - Execute containers with the `docker-compose up -d` command
   - Navigate to `http://localhost:3000/`, there should be a web app available
