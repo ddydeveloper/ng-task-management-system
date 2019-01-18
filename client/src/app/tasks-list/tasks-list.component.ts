@@ -85,10 +85,16 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
   first = 0;
   rows = 15;
+  page = 1;
   orderBy: string = null;
   isDesc = false;
 
   rowsPerPageOptions = [10, 15, 30, 100, 500, 1000];
+
+  setPage(): void {
+    this.first = (this.page - 1) * this.rows;
+    this.loadData();
+  }
 
   getPriorityStyle(priority: ETaskPriority): any {
     if (priority === ETaskPriority.Blocker) {
@@ -134,14 +140,21 @@ export class TasksListComponent implements OnInit, OnDestroy {
       };
     }
 
-    if (task.timeToComplete < 0) {
+    if (task.timeToComplete <= 0) {
       return { "background-color": DangerHex, color: getTextColor(DangerHex) };
     }
 
-    if (task.timeToComplete < 60 * 60) {
+    if (task.timeToComplete < 60 * 60 * 4) {
       return {
         "background-color": WarningHex,
         color: getTextColor(WarningHex)
+      };
+    }
+
+    if (task.timeToComplete < 60 * 60 * 24) {
+      return {
+        "background-color": LightYellowHex,
+        color: getTextColor(LightYellowHex)
       };
     }
 
@@ -150,8 +163,12 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
   refreshData(): void {
     this.first = 0;
-    this.onRowUnselect();
+    this.rows = 15;
+    this.page = 1;
+    this.orderBy = null;
+    this.isDesc = false;
 
+    this.onRowUnselect();
     this.loadData();
   }
 
@@ -160,6 +177,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
     this.rows = event.rows;
     this.orderBy = event.sortField;
     this.isDesc = event.sortOrder === -1 ? true : false;
+    this.page = this.first / this.rows + 1;
 
     if (!this.isFirstPageLoading) {
       this.onRowUnselect();
