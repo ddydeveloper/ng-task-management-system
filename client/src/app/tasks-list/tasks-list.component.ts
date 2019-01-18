@@ -67,6 +67,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
   private initialTaskId: number;
 
   isInitialized = false;
+  isFirstPageLoading = true;
 
   tasks: TaskViewModel[] = [];
   totalTasks: number;
@@ -87,7 +88,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
   orderBy: string = null;
   isDesc = false;
 
-  rowsPerPageOptions = [15, 30, 100, 500, 1000];
+  rowsPerPageOptions = [10, 15, 30, 100, 500, 1000];
 
   getPriorityStyle(priority: ETaskPriority): any {
     if (priority === ETaskPriority.Blocker) {
@@ -159,6 +160,12 @@ export class TasksListComponent implements OnInit, OnDestroy {
     this.rows = event.rows;
     this.orderBy = event.sortField;
     this.isDesc = event.sortOrder === -1 ? true : false;
+
+    if (!this.isFirstPageLoading) {
+      this.onRowUnselect();
+    } else {
+      this.isFirstPageLoading = false;
+    }
 
     this.loadData();
   }
@@ -306,11 +313,9 @@ export class TasksListComponent implements OnInit, OnDestroy {
             this.first = page * this.rows;
           }
 
-          this.loadData();
           this.isInitialized = true;
         });
       } else {
-        this.loadData();
         this.isInitialized = true;
       }
     });
