@@ -35,7 +35,7 @@ UNION ALL SELECT (N'Blocker')
 
 CREATE TABLE [dbo].[Tasks]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(0,1), 
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
     [Name] NVARCHAR(100) NOT NULL, 
     [Description] NVARCHAR(500) NULL, 
     [Added] DATETIME NOT NULL DEFAULT (GETDATE()), 
@@ -47,13 +47,13 @@ CREATE TABLE [dbo].[Tasks]
     FOREIGN KEY (Status) REFERENCES [dbo].[Statuses](Id)
 )
 
-DECLARE @Idx            INT = 0,
+DECLARE @Idx            INT = 1,
         @Added          DATETIME = GETDATE(),
         @RandomDate     INT,
         @RandomStatus   INT,
         @RandomPriority INT
 
-WHILE @Idx >= 0 AND @Idx <= 100000
+WHILE @Idx >= 1 AND @Idx <= 100000
 BEGIN
     SELECT @RandomDate = ROUND(((3600 * 24 * 9 - 1) * RAND()), 0),
            @RandomStatus = ROUND(((2 - 1) * RAND()), 0),
