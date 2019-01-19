@@ -37,7 +37,7 @@ UNION ALL SELECT (N'Blocker')
 
 CREATE TABLE [dbo].[Tasks]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(0,1), 
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1), 
     [Name] NVARCHAR(100) NOT NULL, 
     [Description] NVARCHAR(500) NULL, 
     [Added] DATETIME NOT NULL DEFAULT (GETDATE()), 
@@ -53,9 +53,9 @@ BULK INSERT [dbo].[Tasks]
     FROM '\opt\mssql-scripts\data.csv'
     WITH
     (
-        FIRSTROW = 2,
+        FIRSTROW = 1,
         FIELDTERMINATOR = ';', 
-        ROWTERMINATOR = '\n'
+        ROWTERMINATOR = '0x0a'
     )
 
 PRINT N'BULK INSERT Completed'
