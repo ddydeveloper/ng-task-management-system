@@ -46,10 +46,45 @@ Navigate to `http://localhost:3000/` and enjoy the app!
 
 The back-end [API specification](http://localhost:8001/swagger) should be available on `http://localhost:8001/swagger`. 
 
-You can also connect to the SQL database: server: `localhost,1434`, database: `Tasks`, user: `sa`, password: `P@ssw0rd`. Use [azure-data-studio](https://docs.microsoft.com/ru-ru/sql/azure-data-studio/download?view=sql-server-2017) or [SQL Server management studio](https://docs.microsoft.com/ru-ru/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017) to set up a connection.
+You can also connect to the SQL database with any tool, such as [azure-data-studio](https://docs.microsoft.com/ru-ru/sql/azure-data-studio/download?view=sql-server-2017) and [SQL Server management studio](https://docs.microsoft.com/ru-ru/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-2017). Connection params:
+  - Server: `localhost,1434`
+  - Database: `Tasks`
+  - User: `sa`
+  - Password: `P@ssw0rd`
 
 There is also a logging system implemented with the [Serilog](https://serilog.net/) and the [Seq](https://getseq.net/) as a collect and analyzing tool. Navigate to `http://localhost:8005/` to reach the [Seq web UI](http://localhost:8005/).
 
 ## Docker flow
 
+You can also run containers separately and run them with preferred settings.
 
+### Seq
+
+  - Run the command: `docker run -e ACCEPT_EULA=Y -p PORT_FOR_SEQ_WEB_UI:80 -p PORT_FOR_SEQ:5341 -d datalust/seq:latest`
+
+### Database
+
+  - Go to the `./database` folder
+  - Build an image with the command: `docker build -f Dockerfile.stage -t YOUR_DB_IMAGE_TAG .`
+  - Run a container with the command: `docker run -p YOUR_DB_PORT:1433 YOUR_DB_IMAGE_TAG`
+
+### API app
+
+  - Go to the `./api` folder
+  - Make sure your have correct settings in app.settings.config file: 
+    - Seq="http://localhost:PORT_FOR_SEQ_WEB_UI"
+    - ConnectionStrings__TasksDb": "Server=localhost,YOUR_DB_PORT;DataBase=Tasks;User Id=sa;Password=P@ssw0rd;Connection Timeout=30;"
+  - Build an image with the command: `docker build -f Dockerfile.stage -t YOUR_API_IMAGE_TAG .`
+  - Run a container with the command: `docker run -p YOUR_API_PORT:80 YOUR_API_IMAGE_TAG`
+  
+### Client app
+
+  - Go to the `./client` folder
+  - Make sure your have correct settings in environment.ts file: 
+    - API_URL: "http://localhost:YOUR_API_PORT"
+  - Build an image with the command: `docker build -f Dockerfile.stage -t YOUR_CLIENT_IMAGE_TAG .`
+  - Run a container with the command: `docker run -p YOUR_CLIENT_PORT:3000 YOUR_CLIENT_IMAGE_TAG`
+  
+### Try app
+
+There should be all services available according to the bounded ports: YOUR_CLIENT_PORT, YOUR_API_PORT, YOUR_DB_PORT, PORT_FOR_SEQ_WEB_UI
