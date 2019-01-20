@@ -97,12 +97,12 @@ There is a way to start the apps in a manual way, useful for debugging purposes.
 
 There is no needs to use Seq, it is not a required dependency. So you can ignore this part if you prefer and continue with db, api and client.
 
-  - Use docker image as described (above)[https://github.com/ddydeveloper/ng-task-management-system/tree/master#seq] or install and configure [Seq](https://getseq.net/Download) on your local machine.
+  - Use docker image as described [above](https://github.com/ddydeveloper/ng-task-management-system/tree/master#seq) or install and configure [Seq](https://getseq.net/Download) on your local machine.
 
 ### Database
 
   - Install MS SQL Express/Developer on your local machine;
-  - Use a [manual-deploymen.sql](https://github.com/ddydeveloper/ng-task-management-system/blob/develop/database/manual-deployment.sql) file to create the Tasks database and insert data.
+  - Use a [manual-deploymen.sql](https://github.com/ddydeveloper/ng-task-management-system/blob/master/database/manual-deployment.sql) file to create the Tasks database and insert data.
   
 The script included `WHILE @Idx >= 1 AND @Idx <= 100000` clause. To manage the number of test modify limitations.
 
