@@ -80,7 +80,7 @@ You can also run containers separately and run them with preferred settings.
 ### Client app
 
   - Go to the `./client` folder
-  - Make sure your have correct settings in environment.ts file: 
+  - Make sure your have a correct settings in environment.ts file: 
     - API_URL: "http://localhost:YOUR_API_PORT"
   - Build an image with the command: `docker build -f Dockerfile.stage -t YOUR_CLIENT_IMAGE_TAG .`
   - Run a container with the command: `docker run -p YOUR_CLIENT_PORT:3000 YOUR_CLIENT_IMAGE_TAG`
@@ -88,3 +88,36 @@ You can also run containers separately and run them with preferred settings.
 ### Try app
 
 There should be all services available according to the bounded ports: YOUR_CLIENT_PORT, YOUR_API_PORT, YOUR_DB_PORT, PORT_FOR_SEQ_WEB_UI
+
+## Manual start flow
+
+There is a way to start the apps in a manual way, useful for debugging purposes.
+
+### Seq
+
+There is no needs to use Seq, it is not a required dependency. So you can ignore this part if you prefer and continue with db, api and client.
+
+  - Use docker image as described (above)[https://github.com/ddydeveloper/ng-task-management-system/tree/master#seq] or install and configure [Seq](https://getseq.net/Download) on your local machine.
+
+### Database
+
+  - Install MS SQL Express/Developer on your local machine;
+  - Use a [manual-deploymen.sql](https://github.com/ddydeveloper/ng-task-management-system/blob/develop/database/manual-deployment.sql) file to create the Tasks database and insert data.
+  
+The script included `WHILE @Idx >= 1 AND @Idx <= 100000` clause. To manage the number of test modify limitations.
+
+### API app
+
+  - Go to `./api/api-task-management` folder
+  - Open api-tasks-management solution via [Visual studio](https://visualstudio.microsoft.com/vs/), [Visual studio code](https://code.visualstudio.com/?wt.mc_id=DX_841432) or another preferred IDE
+  - Make sure your have correct settings in app.settings.config file for Seq and ConnectionStrings__TasksDb
+  - Use IDE interface or [dotnet CLI](https://docs.microsoft.com/en-US/dotnet/core/tools/?tabs=netcore2x) to start the app;
+  
+### Client app
+
+  - Make sure you have [node.js/npm](https://nodejs.org/en/) installed on you local machine
+  - Install [angular-cli](https://cli.angular.io/) with the command: `npm install -g @angular/cli`
+  - Open `./client` folder via [Visual studio code](https://code.visualstudio.com/?wt.mc_id=DX_841432), another preferred IDE or just navigate to folder via CLI tool, such as PowerShell
+  - Install npm dependencies with the command: `npm install`
+  - Make sure your have a correct API_URL in environment.ts file bounded to the API app
+  - Run the client project with the command: `npm run start`
