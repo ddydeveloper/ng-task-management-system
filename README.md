@@ -40,8 +40,7 @@ To set up a project:
   - Use CLI and go to a root directory (should contains `docker-compose.yaml` file)
   - Build images with the `docker-compose build` command
   - Execute containers with the `docker-compose up` command
-  
-You can also use a `docker-compose up --build` command instead of the last 2 steps. Include `-d` flag to a command to start containers in the detached mode.
+  - You can also use the `docker-compose up --build` command instead of the last 2 steps. Include `-d` flag to a command to start containers in the detached mode.
 
 Navigate to `http://localhost:3000/` and enjoy the app! 
 
