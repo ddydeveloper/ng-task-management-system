@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      component: database
+  template:
+    metadata:
+      labels:
+        component: database
+    spec:
+      containers: 
+        - name: database
+          image: ddydeveloper/task-management-database
+          ports:
+            - containerPort: 1433
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:   
+    component: database
+  ports:
+    - port: 1433
+      targetPort: 1433
