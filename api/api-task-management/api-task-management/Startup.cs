@@ -100,14 +100,15 @@ namespace api_task_management
                 .UseSignalR(route => { route.MapHub<NotificationsHub>("/hubs/notifications"); })
                 .UseMvcWithDefaultRoute();
 
-            app.UseSwagger();
+            app.UseSwagger(c => c.RouteTemplate = "api/{documentName}/swagger.json");
             app.UseSwaggerUI(
                 options =>
                 {
                     foreach (var description in provider.ApiVersionDescriptions)
                     {
+                        options.RoutePrefix = "api";
                         options.SwaggerEndpoint(
-                            $"/swagger/{description.GroupName}/swagger.json",
+                            $"{description.GroupName}/swagger.json",
                             description.GroupName.ToUpperInvariant());
                     }
                 });
