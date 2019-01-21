@@ -19,12 +19,12 @@ namespace api_task_management
     {
         public Startup(IConfiguration configuration)
         {
-            var sew = configuration.GetSection("Seq").Value;
+            _seqConnection = configuration.GetSection("Seq").Value;
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.File($"{AppContext.BaseDirectory}/Logs/log-.txt", rollingInterval: RollingInterval.Day)
-                .WriteTo.Seq(configuration.GetSection("Seq").Value)
+                .WriteTo.Seq(_seqConnection)
                 .CreateLogger();
 
             Configuration = configuration;
@@ -33,6 +33,7 @@ namespace api_task_management
         public IConfiguration Configuration { get; }
 
         private string _tasksConnection;
+        private string _seqConnection;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -114,6 +115,7 @@ namespace api_task_management
             var logger = loggerFactory.CreateLogger("RequestInfoLogger");
 
             logger.LogInformation($"TasksDb connection string is: {_tasksConnection}");
+            logger.LogInformation($"Seq connection string is: {_seqConnection}");
             logger.LogInformation("All services configured");
         }
 

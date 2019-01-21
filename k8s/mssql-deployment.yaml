@@ -24,3 +24,9 @@ spec:
           volumeMounts:
             - name: mssql-storage
               mountPath: /var/opt/mssql
+          env:
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql-secret
+                  key: SA_PASSWORD

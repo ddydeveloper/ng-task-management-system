@@ -17,3 +17,13 @@ spec:
           image: ddydeveloper/task-management-server
           ports:
             - containerPort: 80
+          env:
+            - name: Seq
+              value: "http://seq-cluster-ip-service"
+            - name: ConnectionStrings__TasksDb
+              value: "Server=mssql-cluster-ip-service;DataBase=Tasks;User Id=sa;Password=$(SA_PASSWORD);Connection Timeout=30;"            
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql-secret
+                  key: SA_PASSWORD
