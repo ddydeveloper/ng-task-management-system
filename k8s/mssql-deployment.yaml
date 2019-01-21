@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: database-deployment
+  name: mssql-deployment
 spec:
   replicas: 1
   selector:
     matchLabels: 
-      component: database
+      component: mssql
   template:
     metadata:
       labels:
-        component: database
+        component: mssql
     spec:
       containers: 
-        - name: database
-          image: ddydeveloper/task-management-database
+        - name: mssql
+          image: ddydeveloper/task-management-mssql
           ports:
             - containerPort: 1433
