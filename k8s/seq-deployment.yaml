@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seq-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      component: seq
+  template:
+    metadata:
+      labels:
+        component: seq
+    spec:
+      containers: 
+        - name: seq
+          image: datalust/seq:latest
+          ports:
+            - name: seq-collect
+              containerPort: 5341
+            - name: seq-web-ui
+              containerPort: 80
