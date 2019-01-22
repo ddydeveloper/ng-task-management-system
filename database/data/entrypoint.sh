@@ -1,3 +1,1 @@
-#start SQL Server, start the script to create the DB and initial data
-echo 'starting database setup'
-/opt/mssql/bin/sqlservr & ./setup.sh & bash
+/opt/mssql/bin/sqlservr --accept-eula & sleep 30 && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $SA_PASSWORD -i ./setup.sql && wait
