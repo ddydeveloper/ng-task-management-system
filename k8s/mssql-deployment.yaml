@@ -19,6 +19,7 @@ spec:
       containers: 
         - name: mssql
           image: ddydeveloper/task-management-mssql
+          command: ["/opt/mssql/bin/sqlservr", "/opt/mssql-tools/bin/sqlcmd"]
           ports:
             - containerPort: 1433
           volumeMounts:
