@@ -16,7 +16,7 @@ spec:
         - name: server
           image: ddydeveloper/task-management-server
           ports:
-            - containerPort: 80
+            - containerPort: 5000
           env:
             - name: Seq
               value: "http://seq-cluster-ip-service"

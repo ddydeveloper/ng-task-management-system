@@ -42,7 +42,7 @@ services:
       - ConnectionStrings__TasksDb=Server=db;DataBase=Tasks;User Id=sa;Password=P@ssw0rd;Connection Timeout=30;
       - Seq=http://seq/
     ports:
-      - "8001:80"
+      - "5000:5000"
     depends_on:
       - db
       - seq
