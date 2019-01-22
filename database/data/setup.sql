@@ -50,7 +50,7 @@ CREATE TABLE [dbo].[Tasks]
 )
 
 BULK INSERT [dbo].[Tasks]
-    FROM '\opt\mssql-scripts\data.csv'
+    FROM '\opt\mssql\setup-scripts\data.csv'
     WITH
     (
         FIRSTROW = 1,

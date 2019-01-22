@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: server-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels: 
       component: server
@@ -21,7 +21,7 @@ spec:
             - name: Seq
               value: "http://seq-cluster-ip-service"
             - name: ConnectionStrings__TasksDb
-              value: "Server=mssql-cluster-ip-service;DataBase=Tasks;User Id=sa;Password=$(SA_PASSWORD);Connection Timeout=30;"            
+              value: "Server=mssql-cluster-ip-service;DataBase=Tasks;User Id=sa;Password=P@ssw0rd;Connection Timeout=30;"            
             - name: SA_PASSWORD
               valueFrom:
                 secretKeyRef:

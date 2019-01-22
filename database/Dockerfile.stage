@@ -1,13 +1,12 @@
 FROM microsoft/mssql-server-linux
 
-RUN mkdir -p /opt/mssql-scripts
+RUN mkdir -p /opt/mssql/setup-scripts
 
-COPY ./post-deployment.sql /opt/mssql-scripts
-COPY ./data.csv /opt/mssql-scripts
+COPY ./data /opt/mssql/setup-scripts
 
 ENV SA_PASSWORD=P@ssw0rd
 ENV ACCEPT_EULA=Y
 
 RUN ( /opt/mssql/bin/sqlservr --accept-eula & ) | grep -q "Service Broker manager has started" \
-    && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'P@ssw0rd' -i/opt/mssql-scripts/post-deployment.sql \
-    && pkill sqlservr 
+    && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'P@ssw0rd' -i /opt/mssql/setup-scripts/setup.sql \
+    && pkill sqlservr
