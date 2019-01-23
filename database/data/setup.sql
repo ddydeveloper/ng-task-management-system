@@ -1,5 +1,8 @@
 USE [master]
 
+IF ( (SELECT COUNT(*) FROM sys.databases WHERE name = 'Tasks') > 0 )
+    RAISERROR('Exists', 20, 1);
+
 CREATE DATABASE [Tasks]
 GO
 
@@ -50,7 +53,7 @@ CREATE TABLE [dbo].[Tasks]
 )
 
 BULK INSERT [dbo].[Tasks]
-    FROM '\data.csv'
+    FROM '\usr\config\data.csv'
     WITH
     (
         FIRSTROW = 1,

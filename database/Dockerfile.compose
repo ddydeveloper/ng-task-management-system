@@ -1,2 +1,6 @@
 FROM microsoft/mssql-server-linux
-COPY ./data .
+
+RUN mkdir -p /usr/config
+COPY ./data /usr/config
+
+RUN chmod +x /usr/config/entrypoint.sh
