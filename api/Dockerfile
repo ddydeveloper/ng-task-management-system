@@ -9,7 +9,7 @@ COPY api-task-management/api-task-management/*.csproj ./api-task-management/
 COPY api-task-management/api-task-management/. ./api-task-management/
 WORKDIR /app/api-task-management
 RUN dotnet restore
-RUN dotnet publish -o out
+RUN dotnet publish -c Release -o out
 
 # Build runtime image
 FROM microsoft/dotnet:2.1-aspnetcore-runtime AS runtime

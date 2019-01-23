@@ -14,10 +14,15 @@ services:
     restart: always
     image: task-management/db
     build:
-      dockerfile: Dockerfile.stage
+      dockerfile: Dockerfile.compose
       context: ./database
     ports:
-      - "1434:1433"
+      - "1437:1433"
+    environment:
+      - SA_PASSWORD=P@ssw0rd
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Developer
+    command: ["sh", "entrypoint.sh"]
   client:
     restart: always
     image: task-management/client

@@ -1,0 +1,2 @@
+FROM microsoft/mssql-server-linux
+COPY ./data .

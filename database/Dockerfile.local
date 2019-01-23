@@ -1,0 +1,8 @@
+FROM microsoft/mssql-server-linux
+COPY ./data .
+
+ENV SA_PASSWORD=P@ssw0rd
+ENV ACCEPT_EULA=Y
+ENV MSSQL_PID=Developer
+
+CMD ["sh", "entrypoint.sh"]

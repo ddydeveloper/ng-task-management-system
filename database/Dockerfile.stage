@@ -1,7 +1,0 @@
-FROM microsoft/mssql-server-linux
-
-COPY ./data .
-
-# ENV SA_PASSWORD=P@ssw0rd
-
-# ENTRYPOINT ["sh", "entrypoint.sh"]
