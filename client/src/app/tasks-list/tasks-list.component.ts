@@ -369,7 +369,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
 
     this.hubConnection = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.Debug)
-      .withUrl(`${environment.API_URL}/hubs/notifications`)
+      .withUrl(`${environment.API_URL}/api/signalR/notifications`)
       .build();
 
     this.hubConnection.start();

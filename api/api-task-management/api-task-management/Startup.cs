@@ -33,7 +33,7 @@ namespace api_task_management
         public IConfiguration Configuration { get; }
 
         private string _tasksConnection;
-        private string _seqConnection;
+        private readonly string _seqConnection;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -97,7 +97,7 @@ namespace api_task_management
 
             app.UseHttpsRedirection()
                 .UseCors("AllowAll")
-                .UseSignalR(route => { route.MapHub<NotificationsHub>("/hubs/notifications"); })
+                .UseSignalR(route => { route.MapHub<NotificationsHub>("/api/signalR/notifications"); })
                 .UseMvcWithDefaultRoute();
 
             app.UseSwagger(c => c.RouteTemplate = "api/{documentName}/swagger.json");
