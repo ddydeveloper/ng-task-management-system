@@ -29,7 +29,7 @@ before_install:
   - docker build -t ddydeveloper/task-management-client-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run ddydeveloper/task-management-client-test npm test --cc
+  - docker run ddydeveloper/task-management-client-test npm test --watch=false --cc
 
 deploy:
   provider: script
