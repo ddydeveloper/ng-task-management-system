@@ -10,6 +10,7 @@ import { TasksApi } from "./_services/tasks.api";
 import { StatusPipe } from "./_pipes/status.pipe";
 import { PriorityPipe } from "./_pipes/priority.pipe";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NotificationsService } from "./_services/notifications.service";
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [TasksApi],
+  providers: [TasksApi, NotificationsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { TasksApi } from "../_services/tasks.api";
 import { interval, Observable, fromEvent } from "rxjs";
-import { map, debounceTime, switchMap } from "rxjs/operators";
+import { map, debounceTime } from "rxjs/operators";
 import TaskViewModel from "../_models/task.view-model";
 import TaskModel from "../_models/task.model";
 import { getDateDiffInSeconds, secondsToText } from "../_helpers/date.helper";
@@ -16,9 +16,6 @@ import { MessageService, SelectItem, ConfirmationService } from "primeng/api";
 import { ETaskStatus } from "../_enums/task-status.enum";
 import { ActivatedRoute, Router } from "@angular/router";
 import TaskSetModel from "../_models/task-set.model";
-import { HubConnection } from "@aspnet/signalr";
-import { environment } from "src/environments/environment";
-import * as signalR from "@aspnet/signalr";
 import { ETaskPriority } from "../_enums/task-priority.enum";
 import {
   DarkedRedHex,
@@ -29,6 +26,7 @@ import {
   LightYellowHex
 } from "../_constants/colors.constants";
 import { getTextColor } from "../_helpers/color.helper";
+import { NotificationsService } from "../_services/notifications.service";
 
 @Component({
   selector: "app-tasks-list",
@@ -43,10 +41,10 @@ export class TasksListComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private route: ActivatedRoute,
     private router: Router,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private notificationsService: NotificationsService
   ) {}
 
-  private hubConnection: HubConnection;
   pollingTasks: any;
 
   cols = [
@@ -367,14 +365,9 @@ export class TasksListComponent implements OnInit, OnDestroy {
         });
     });
 
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      .configureLogging(signalR.LogLevel.Debug)
-      .withUrl(`${environment.API_URL}/api/signalR/notifications`)
-      .build();
+    this.notificationsService.start();
 
-    this.hubConnection.start();
-
-    this.hubConnection.on("TaskCreated", (t: TaskModel) => {
+    this.notificationsService.subscribe("TaskCreated", (t: TaskModel) => {
       this.messageService.add({
         severity: "success",
         summary: "Task created",
@@ -384,7 +377,7 @@ export class TasksListComponent implements OnInit, OnDestroy {
       this.loadData();
     });
 
-    this.hubConnection.on("TaskUpdated", (t: TaskModel) => {
+    this.notificationsService.subscribe("TaskUpdated", (t: TaskModel) => {
       if (t.status === ETaskStatus.Archived) {
         this.messageService.add({
           severity: "success",
@@ -410,6 +403,5 @@ export class TasksListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.sub.unsubscribe();
     this.pollingTasks.unsubscribe();
-    this.hubConnection.stop();
   }
 }
