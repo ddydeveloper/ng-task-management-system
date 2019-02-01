@@ -12,6 +12,6 @@ docker push ddydeveloper/task-management-mssql:$SHA
 
 kubectl apply -f k8s
 # create secrets if needed via GKE console to keep data hidden 
-kubectl set image deployments/client-deployment server=ddydeveloper/task-management-client:$SHA
+kubectl set image deployments/client-deployment client=ddydeveloper/task-management-client:$SHA
 kubectl set image deployments/server-deployment server=ddydeveloper/task-management-server:$SHA
-kubectl set image deployments/mssql-deployment  server=ddydeveloper/task-management-mssql:$SHA
+kubectl set image deployments/mssql-deployment  mssql=ddydeveloper/task-management-mssql:$SHA
