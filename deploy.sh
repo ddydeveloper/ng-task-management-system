@@ -13,6 +13,7 @@ docker push ddydeveloper/task-management-mssql:$SHA
 kubectl apply -f k8s
 
 # In case if you are using secrets to store data in a secure way use create secret command and not to include it inside deploy script 
+kubectl delete secret mssql-secret
 kubectl create secret generic mssql-secret --from-literal SA_PASSWORD="P@ssw0rd" --from-literal TASKS_DB="Server=mssql-cluster-ip-service;DataBase=Tasks;User Id=sa;Password=P@ssw0rd;Connection Timeout=30;"
 
 kubectl set image deployments/client-deployment client=ddydeveloper/task-management-client:$SHA
