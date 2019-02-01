@@ -19,7 +19,7 @@ spec:
       containers: 
         - name: mssql
           image: ddydeveloper/task-management-mssql
-          # command: ["sh", "/usr/config/entrypoint.sh"]
+          command: ["sh", "/usr/config/entrypoint.sh"]
           ports:
             - containerPort: 1433         
           volumeMounts:
