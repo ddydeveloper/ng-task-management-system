@@ -3,4 +3,4 @@ FROM microsoft/mssql-server-linux
 RUN mkdir -p /usr/config
 COPY ./data /usr/config
 
-# RUN chmod +x /usr/config/entrypoint.sh
+RUN chmod +x /usr/config/entrypoint.sh
