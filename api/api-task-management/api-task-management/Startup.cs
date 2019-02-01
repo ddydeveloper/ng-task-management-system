@@ -39,7 +39,7 @@ namespace api_task_management
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSignalR();
+            services.AddSignalR().AddRedis(Configuration.GetConnectionString("Redis"));
 
             services.AddMvcCore()
                 .AddVersionedApiExplorer(options =>

@@ -21,7 +21,9 @@ spec:
             - name: Seq
               value: "http://seq-cluster-ip-service"
             - name: ConnectionStrings__TasksDb
-              value: "Server=mssql-cluster-ip-service;DataBase=Tasks;User Id=sa;Password=P@ssw0rd;Connection Timeout=30;"            
+              value: "Server=mssql-cluster-ip-service;DataBase=Tasks;User Id=sa;Password=P@ssw0rd;Connection Timeout=30;"    
+            - name: ConnectionStrings__Redis
+              value: "redis-cluster-ip-service"            
             - name: SA_PASSWORD
               valueFrom:
                 secretKeyRef:
