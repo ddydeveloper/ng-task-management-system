@@ -18,4 +18,6 @@ kubectl create secret generic mssql-secret --from-literal SA_PASSWORD="P@ssw0rd"
 
 kubectl set image deployments/client-deployment client=ddydeveloper/task-management-client:$SHA
 kubectl set image deployments/server-deployment server=ddydeveloper/task-management-server:$SHA
-kubectl set image deployments/mssql-deployment  mssql=ddydeveloper/task-management-mssql:$SHA
+
+# Not to delpoy db any time because of the availability settings
+# kubectl set image deployments/mssql-deployment  mssql=ddydeveloper/task-management-mssql:$SHA
