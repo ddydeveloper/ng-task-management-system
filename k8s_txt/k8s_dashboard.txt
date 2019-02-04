@@ -1,0 +1,14 @@
+# attach to a container
+kubectl exec -it mssql-deployment-588ddd798d-vz6d2 "bash"
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '<YourNewStrong!Passw0rd>'
+
+# configure dashboard
+kubectl -n kube-system get secret
+kubectl -n kube-system describe secret kubernetes-dashboard-token-cwrps
+
+# Configure ingress and secret 
+kubectl create secret generic mssql-secret --from-literal SA_PASSWORD=P@ssw0rd
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml
+
+
