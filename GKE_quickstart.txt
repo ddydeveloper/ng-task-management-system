@@ -1,0 +1,38 @@
+1. Create cluster
+
+2. Create service-account 
+
+3. Encrypt service-account with ruby image
+	- docker run -it -v ${pwd}:/app ruby:2.3 sh
+	- gem install travis
+	- travis login
+	- travis encrypt-file service-account.json -r ddydeveloper/multi-k8s
+	
+4. Configure GKE console:
+	- gcloud config set project k8s-ddy
+	- gcloud config set compute/zone europe-north1-a	
+	- gcloud container clusters get-credentials task-management-cluster
+	
+5. Set up helm for GKE
+	- follow quick start guide "From script" section:
+		- curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh
+		- chmod 700 get_helm.sh
+		- ./get_helm.sh
+	- create tiller service-account: 
+		kubectl create serviceaccount --namespace kube-system tiller
+	- create tiller service-account admin role binding: 
+		kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+	- init helm with tiller: 
+		helm init --service-account tiller --upgrade
+	
+6. Set up ingress nginx with helm
+	- helm install stable/nginx-ingress --name my-nginx --set rbac.create=true
+	
+7. Create secrets if needed:
+	- kubectl create secret generic mssql-secret --from-literal SA_PASSWORD=P@ssw0rd
+
+8. Letsencrypt & cert-manager
+	- install cert-manager: 
+		helm install --name cert-manager --version v0.5.2 --namespace kube-system stable/cert-manager
+	
+9. Deploye and enjoy 
