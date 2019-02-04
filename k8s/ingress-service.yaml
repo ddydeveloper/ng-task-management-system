@@ -13,11 +13,11 @@ metadata:
 spec:
   tls:
     - hosts:
-        - meet-to-me.com
-        - www.meet-to-me.com
-      secretName: meet-to-me-com
+        - meet-to-me.ru
+        - www.meet-to-me.ru
+      secretName: meet-to-me-ru
   rules:
-    - host: meet-to-me.com
+    - host: meet-to-me.ru
       http:
         paths:
           - path: /
@@ -28,7 +28,7 @@ spec:
             backend:              
               serviceName: server-cluster-ip-service
               servicePort: 5000
-    - host: www.meet-to-me.com
+    - host: www.meet-to-me.ru
       http:
         paths:
           - path: /
