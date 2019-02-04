@@ -7,9 +7,27 @@ metadata:
     nginx.ingress.kubernetes.io/session-cookie-hash: sha1
     nginx.ingress.kubernetes.io/session-cookie-name: route
     kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-ssuer: 'letsencrypt-prod'
+    nginx.ingress.kubernetes.io/ssi-redirect: 'true'
 spec:
+  tls:
+    - hosts:
+        - meet-to-me.com
+        - www.meet-to-me.com
+      secretName: meet-to-me-com
   rules:
-    - host: example.com
+    - host: meet-to-me.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: client-cluster-ip-service
+              servicePort: 3000
+          - path: /api
+            backend:              
+              serviceName: server-cluster-ip-service
+              servicePort: 5000
+    - host: www.meet-to-me.com
       http:
         paths:
           - path: /

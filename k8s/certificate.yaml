@@ -1,0 +1,20 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: meet-to-me-com-tls
+spec:
+  secretName: meet-to-me-com
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: meet-to-me.com
+  dnsNames:
+    - meet-to-me.com
+    - www.meet-to-me.com
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx
+        domains:
+          - meet-to-me.com
+          - www.meet-to-me.com
