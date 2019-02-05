@@ -11,8 +11,7 @@ metadata:
 spec:
   ports:
   - port: 5601
-    protocol: TCP
-    targetPort: ui
+    targetPort: 5601
   selector:
-    k8s-app: kibana
+    app: kibana
   type: ClusterIP

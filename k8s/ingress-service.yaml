@@ -28,10 +28,6 @@ spec:
             backend:              
               serviceName: server-cluster-ip-service
               servicePort: 5000
-          - path: /kibana
-            backend:              
-              serviceName: kibana-cluster-ip-service
-              servicePort: 5601
     - host: www.meet-to-me.ru
       http:
         paths:
@@ -43,7 +39,3 @@ spec:
             backend:              
               serviceName: server-cluster-ip-service
               servicePort: 5000
-          - path: /kibana
-            backend:              
-              serviceName: kibana-cluster-ip-service
-              servicePort: 5601
