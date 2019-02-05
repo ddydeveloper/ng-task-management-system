@@ -20,6 +20,6 @@ kubectl set image deployments/client-deployment client=ddydeveloper/task-managem
 kubectl set image deployments/server-deployment server=ddydeveloper/task-management-server:$SHA
 
 # Database initialize single instance, set up availability level to replicate
-kubectl delete deployment ./k8s_db/mssql-deployment.yaml
+kubectl delete ./k8s_db/mssql-deployment.yaml
 kubectl apply -f k8s_db
 kubectl set image deployments/mssql-deployment  mssql=ddydeveloper/task-management-mssql:$SHA
