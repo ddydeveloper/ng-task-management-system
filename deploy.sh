@@ -19,6 +19,7 @@ kubectl create secret generic mssql-secret --from-literal SA_PASSWORD="P@ssw0rd"
 kubectl set image deployments/client-deployment client=ddydeveloper/task-management-client:$SHA
 kubectl set image deployments/server-deployment server=ddydeveloper/task-management-server:$SHA
 
-# Database initialize just once, set up availability level to replicate
-# kubectl apply -f k8s_db
-# kubectl set image deployments/mssql-deployment  mssql=ddydeveloper/task-management-mssql:$SHA
+# Database initialize single instance, set up availability level to replicate
+kubectl delete deployments -f ./k8s_db/mssql-deployment.yaml
+kubectl apply -f k8s_db
+kubectl set image deployments/mssql-deployment  mssql=ddydeveloper/task-management-mssql:$SHA

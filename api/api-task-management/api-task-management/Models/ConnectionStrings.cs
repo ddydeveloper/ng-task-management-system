@@ -2,5 +2,7 @@
 {
     public string TasksDb { get; set; }
 
-    public string Seq { get; set; }
+    public string ElasticSearch { get; set; }
+
+    public string Redis { get; set; }
 }

@@ -18,10 +18,7 @@ spec:
           ports:
             - containerPort: 5000
           env:
-            - name: Seq
-              value: "http://seq-cluster-ip-service"
             - name: ConnectionStrings__TasksDb
-              # value: "Server=mssql-cluster-ip-service;DataBase=Tasks;User Id=sa;Password=P@ssword;Connection Timeout=30;" 
               valueFrom:
                 secretKeyRef:
                   name: mssql-secret

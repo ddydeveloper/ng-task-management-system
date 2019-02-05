@@ -1,15 +1,6 @@
 version: '3'
 
 services:
-  seq:
-    restart: always      
-    image: datalust/seq:latest
-    container_name: seq
-    environment:
-      - ACCEPT_EULA=Y
-    ports:
-      - "5341:5341"
-      - "8005:80"
   db:
     restart: always
     image: task-management/db
@@ -52,11 +43,33 @@ services:
     container_name: api
     environment:
       - ConnectionStrings__TasksDb=Server=db;DataBase=Tasks;User Id=sa;Password=P@ssw0rd;Connection Timeout=30;
-      - ConnectionStrings__Redis=redis
-      - Seq=http://seq/
+      - ConnectionStrings__Redis=redis;
+      - ConnectionStrings__ElasticSearch=http://elasticsearch/;
     ports:
       - "5000:5000"
     depends_on:
       - db
-      - seq
       - redis
+      - elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+    networks:
+      - elk-network
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.5.4
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-network
+    environment:
+      ELASTICSEARCH_HOSTS: elasticsearch
+
+networks:
+  elk-network:
+    driver: bridge

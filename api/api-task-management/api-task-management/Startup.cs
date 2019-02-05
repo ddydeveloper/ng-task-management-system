@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Sinks.Elasticsearch;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace api_task_management
@@ -19,12 +20,17 @@ namespace api_task_management
     {
         public Startup(IConfiguration configuration)
         {
-            _seqConnection = configuration.GetSection("Seq").Value;
+            _tasksConnection = configuration.GetConnectionString("TasksDb");
+            _elkConnection = configuration.GetConnectionString("ElasticSearch");
+            _redisConnection = configuration.GetConnectionString("Redis");
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.File($"{AppContext.BaseDirectory}/Logs/log-.txt", rollingInterval: RollingInterval.Day)
-                .WriteTo.Seq(_seqConnection)
+                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(_elkConnection))
+                {
+                    AutoRegisterTemplate = true
+                })
                 .CreateLogger();
 
             Configuration = configuration;
@@ -32,14 +38,15 @@ namespace api_task_management
 
         public IConfiguration Configuration { get; }
 
-        private string _tasksConnection;
-        private readonly string _seqConnection;
+        private readonly string _tasksConnection;
+        private readonly string _redisConnection;
+        private readonly string _elkConnection;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSignalR().AddRedis(Configuration.GetConnectionString("Redis"));
+            services.AddSignalR().AddRedis(_redisConnection);
 
             services.AddMvcCore()
                 .AddVersionedApiExplorer(options =>
@@ -75,8 +82,6 @@ namespace api_task_management
 
                         options.OperationFilter<SwaggerDefaultValues>();
                     });
-
-            _tasksConnection = Configuration.GetConnectionString("TasksDb");
 
             services.Configure<ConnectionStrings>(Configuration.GetSection(nameof(ConnectionStrings)));
             services.AddScoped<ITasksService, TasksService>();
@@ -116,7 +121,9 @@ namespace api_task_management
             var logger = loggerFactory.CreateLogger("RequestInfoLogger");
 
             logger.LogInformation($"TasksDb connection string is: {_tasksConnection}");
-            logger.LogInformation($"Seq connection string is: {_seqConnection}");
+            logger.LogInformation($"Redis connection string is: {_redisConnection}");
+            logger.LogInformation($"ELK connection string is: {_elkConnection}");
+
             logger.LogInformation("All services configured");
         }
 
