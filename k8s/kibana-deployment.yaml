@@ -12,7 +12,6 @@ spec:
       app: kibana
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: kibana
     spec:
