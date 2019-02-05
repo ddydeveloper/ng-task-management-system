@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: kikibana-deploymentbana
+  name: kibana-deployment
   namespace: logging
   labels:
     app: kibana
