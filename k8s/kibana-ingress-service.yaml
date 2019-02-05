@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kibana-ingress-service
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    certmanager.k8s.io/acme-http01-edit-in-place: 'true'
+spec:
+  tls:
+    - hosts:
+        - meet-to-me.ru
+        - www.meet-to-me.ru
+      secretName: meet-to-me-ru
+  rules:
+    - host: meet-to-me.ru
+      http:
+        paths:
+          - path: /kibana
+            backend:              
+              serviceName: kibana-node-port
+              servicePort: 5601
+    - host: www.meet-to-me.ru
+      http:
+        paths:
+          - path: /kibana
+            backend:              
+              serviceName: kibana-node-port
+              servicePort: 5601
