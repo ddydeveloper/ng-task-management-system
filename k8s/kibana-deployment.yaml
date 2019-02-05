@@ -19,7 +19,7 @@ spec:
       - env:
         - name: ELASTICSEARCH_URL
           value: http://elasticsearch-client.logging.svc.cluster.local:9200
-        image: docker.elastic.co/kibana/kibana-oss:6.6.0
+        image: docker.elastic.co/kibana/kibana-oss:6.4.2
         name: kibana
         ports:
         - containerPort: 5601
