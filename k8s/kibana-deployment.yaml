@@ -1,7 +1,7 @@
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: kibana
+  name: kikibana-deploymentbana
   namespace: logging
   labels:
     app: kibana
@@ -12,15 +12,16 @@ spec:
       app: kibana
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: kibana
     spec:
       containers:
-      - name: kibana
-        image: docker.elastic.co/kibana/kibana-oss:6.4.2
-        env:
-          - name: ELASTICSEARCH_URL
-            value: http://elasticsearch-client.logging.svc.cluster.local:9200
+      - env:
+        - name: ELASTICSEARCH_URL
+          value: http://elasticsearch-client.logging.svc.cluster.local:9200
+        image: docker.elastic.co/kibana/kibana-oss:6.6.0
+        name: kibana
         ports:
         - containerPort: 5601
-          name: http
+          protocol: TCP

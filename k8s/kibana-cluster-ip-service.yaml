@@ -1,11 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app: kibana
   name: kibana-cluster-ip-service
+  namespace: logging
 spec:
-  type: ClusterIP
-  selector:   
-    component: kibana
   ports:
-    - port: 5601
-      targetPort: 5601
+  - port: 5601
+    protocol: TCP
+    targetPort: 5601
+  selector:
+    app: kibana
+  type: ClusterIP
