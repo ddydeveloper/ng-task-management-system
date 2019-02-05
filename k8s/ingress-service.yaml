@@ -28,7 +28,7 @@ spec:
             backend:              
               serviceName: server-cluster-ip-service
               servicePort: 5000
-          - path: /logs
+          - path: /kibana
             backend:              
               serviceName: kibana
               servicePort: 5601
@@ -43,7 +43,7 @@ spec:
             backend:              
               serviceName: server-cluster-ip-service
               servicePort: 5000
-          - path: /logs
+          - path: /kibana
             backend:              
               serviceName: kibana
               servicePort: 5601
