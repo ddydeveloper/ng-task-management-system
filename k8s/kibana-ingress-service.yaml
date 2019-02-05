@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kibana-ingress-service
+  annotations: 
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/configuration-snippet: rewrite ^/kibana/(.*)$ /$1 break;
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+    - hosts:
+        - meet-to-me.ru
+        - www.meet-to-me.ru
+      secretName: meet-to-me-ru
+  rules:
+    - host: meet-to-me.ru
+      http:
+        paths:
+          - path: /kibana
+            backend:              
+              serviceName: kibana-cluster-ip-service
+              servicePort: 5601
+    - host: www.meet-to-me.ru
+      http:
+        paths:
+          - path: /kibana
+            backend:              
+              serviceName: kibana-cluster-ip-service
+              servicePort: 5601
