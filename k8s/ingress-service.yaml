@@ -14,7 +14,9 @@ spec:
   tls:
     - hosts:
         - meet-to-me.ru
+        - meet-to-me.com
         - www.meet-to-me.ru
+        - www.meet-to-me.com
       secretName: meet-to-me-ru
   rules:
     - host: meet-to-me.ru
@@ -28,7 +30,29 @@ spec:
             backend:              
               serviceName: server-cluster-ip-service
               servicePort: 5000
+    - host: meet-to-me.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: client-cluster-ip-service
+              servicePort: 3000
+          - path: /api
+            backend:              
+              serviceName: server-cluster-ip-service
+              servicePort: 5000
     - host: www.meet-to-me.ru
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: client-cluster-ip-service
+              servicePort: 3000
+          - path: /api
+            backend:              
+              serviceName: server-cluster-ip-service
+              servicePort: 5000
+    - host: www.meet-to-me.com
       http:
         paths:
           - path: /

@@ -11,7 +11,9 @@ spec:
   tls:
     - hosts:
         - meet-to-me.ru
+        - meet-to-me.com
         - www.meet-to-me.ru
+        - www.meet-to-me.com
       secretName: meet-to-me-ru
   rules:
   - host: meet-to-me.ru
@@ -21,7 +23,21 @@ spec:
         backend:
           serviceName: kibana-cluster-ip-service
           servicePort: 5601
+  - host: meet-to-me.com
+    http:
+      paths:
+      - path: /kibana
+        backend:
+          serviceName: kibana-cluster-ip-service
+          servicePort: 5601
   - host: www.meet-to-me.ru
+    http:
+      paths:
+      - path: /kibana
+        backend:
+          serviceName: kibana-cluster-ip-service
+          servicePort: 5601
+  - host: www.meet-to-me.com
     http:
       paths:
       - path: /kibana
