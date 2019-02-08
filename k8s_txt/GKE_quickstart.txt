@@ -39,5 +39,7 @@
 	- helm install incubator/elasticsearch --namespace logging --name elasticsearch --set data.terminationGracePeriodSeconds=0
 	- helm install --name fluentd --namespace logging stable/fluentd-elasticsearch --set elasticsearch.host=elasticsearch-client.logging.svc.cluster.local,elasticsearch.port=9200
 	- helm install --name kibana --namespace logging stable/kibana --set env.ELASTICSEARCH_URL=http://elasticsearch-client.logging.svc.cluster.local:9200
+	или 
+	- helm install --name kibana --namespace logging stable/kibana --set image.tag=6.4.2 --set  env.ELASTICSEARCH_URL=http://elasticsearch-client.logging.svc.cluster.local:9200
 
 9. Deploy apps 
