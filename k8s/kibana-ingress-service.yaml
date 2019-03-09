@@ -1,52 +1,16 @@
-apiVersion: extensions/v1beta1
-kind: Ingress
+apiVersion: v1
+kind: Service
 metadata:
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
-    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
-    certmanager.k8s.io/acme-http01-edit-in-place: 'true'
+  name: kibana
+  namespace: default
   labels:
-    app: kibana
-    chart: kibana-1.4.1
-    heritage: Tiller
-    release: kibana
-  name: kibana-ingress-service
-  namespace: logging
+    component: kibana
 spec:
-  tls:
-    - hosts:
-        - meet-to-me.ru
-        - meet-to-me.com
-        - www.meet-to-me.ru
-        - www.meet-to-me.com
-      secretName: meet-to-me-ru
-  rules:
-  - host: meet-to-me.ru
-    http:
-      paths:
-      - path: /kibana
-        backend:
-          serviceName: kibana
-          servicePort: 443
-  - host: meet-to-me.com
-    http:
-      paths:
-      - path: /kibana
-        backend:
-          serviceName: kibana
-          servicePort: 443
-  - host: www.meet-to-me.ru
-    http:
-      paths:
-      - path: /kibana
-        backend:
-          serviceName: kibana
-          servicePort: 443
-  - host: www.meet-to-me.com
-    http:
-      paths:
-      - path: /kibana
-        backend:
-          serviceName: kibana
-          servicePort: 443
+  type: LoadBalancer
+  selector:
+    component: kibana
+  ports:
+  - port: 5601
+    protocol: "TCP"
+    name: "http"
+    targetPort: 5601
