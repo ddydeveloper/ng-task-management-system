@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kibana
+  name: kibana-load-balancer
+  namespace: logging
+spec:
+  ports:
+  - nodePort: 32174
+    port: 80
+    protocol: TCP
+    targetPort: 5601
+  selector:
+    app: kibana
+    release: kibana
+  type: LoadBalancer
