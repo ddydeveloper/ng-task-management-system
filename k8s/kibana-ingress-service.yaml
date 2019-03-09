@@ -6,7 +6,6 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: 'true'
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
     certmanager.k8s.io/acme-http01-edit-in-place: 'true'
-    nginx.ingress.kubernetes.io/rewrite-target: /
   labels:
     app: kibana
     chart: kibana-1.4.1
