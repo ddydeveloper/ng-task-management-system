@@ -23,13 +23,14 @@ before_install:
   - gcloud container clusters get-credentials task-management-cluster
   
   # Login to docker hub
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
   # Run tests
-  - docker build -t ddydeveloper/task-management-client-test -f ./client/Dockerfile.dev ./client
+  # - docker build -t ddydeveloper/task-management-client-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run ddydeveloper/task-management-client-test npm test
+  # - docker run ddydeveloper/task-management-client-test npm test
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 deploy:
   provider: script
