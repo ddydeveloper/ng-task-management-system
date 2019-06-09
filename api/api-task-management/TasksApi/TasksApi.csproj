@@ -11,9 +11,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CQRS_Queries\Handlers\" />
-    <Folder Include="CQRS_Queries\Queries\" />
-  </ItemGroup>
-
 </Project>
