@@ -2,7 +2,6 @@
 
 2. Create service-account, download the file and rename to "service-account.json"
 Enable Cloud Resource Manager API by visiting https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=607314028912 
-https://cloud.google.com/kubernetes-engine/docs/troubleshooting#gke_service_account_deleted
 
 3. Encrypt service-account with ruby image
 	- docker run -it -v ${pwd}:/app ruby:2.3 sh
@@ -13,12 +12,12 @@ https://cloud.google.com/kubernetes-engine/docs/troubleshooting#gke_service_acco
 		# ddydeveloper/ng-task-management-system - your repository
 	
 4. Configure GKE console:
-	- gcloud config set project k8s-ddy-243519
-		# k8s-ddy-243519 - your project id
+	- gcloud config set project task-management-243511
+		# task-management-243511 - your project id
 	- gcloud config set compute/zone europe-north1-a
 		# rope-north1-a - your cluster zone	
-	- gcloud container clusters get-credentials task-management-cluster
-		# task-management-cluster - your cluster name
+	- gcloud container clusters get-credentials tm-cluster
+		# tm-cluster - your cluster name
 	
 5. Set up helm for GKE
 	- follow quick start guide "From script" section:

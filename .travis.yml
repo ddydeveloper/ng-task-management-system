@@ -16,9 +16,9 @@ before_install:
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud components update kubectl
   - gcloud auth activate-service-account --key-file service-account.json
-  - gcloud config set project k8s-ddy-243519
+  - gcloud config set project task-management-243511
   - gcloud config set compute/zone europe-north1-a
-  - gcloud container clusters get-credentials task-management-cluster
+  - gcloud container clusters get-credentials tm-cluster
 
 script:
   # - docker run ddydeveloper/task-management-client-test npm test
