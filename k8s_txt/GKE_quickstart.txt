@@ -1,6 +1,8 @@
 1. Create cluster
 
 2. Create service-account, download the file and rename to "service-account.json"
+Enable Cloud Resource Manager API by visiting https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=607314028912 
+https://cloud.google.com/kubernetes-engine/docs/troubleshooting#gke_service_account_deleted
 
 3. Encrypt service-account with ruby image
 	- docker run -it -v ${pwd}:/app ruby:2.3 sh

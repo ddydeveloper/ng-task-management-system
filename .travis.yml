@@ -20,6 +20,7 @@ before_install:
   - gcloud auth activate-service-account --key-file service-account.json
   - gcloud config set project k8s-ddy-243519
   - gcloud config set compute/zone europe-north1-a
+  - gcloud config set container/use_client_certificate True
   - gcloud container clusters get-credentials task-management-cluster
   
   # Login to docker hub
