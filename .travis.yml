@@ -18,8 +18,8 @@ before_install:
   # Configure gloud environment
   - gcloud components update kubectl
   - gcloud auth activate-service-account --key-file service-account.json
-  - gcloud auth activate-service-account --key-file service-account.json || die "unable to authenticate service account for gcloud"
-  - gcloud beta auth application-default activate-service-account --key-file service-account.json || die "unable to authenticate service account for kubectl"
+  - gcloud auth activate-service-account --key-file service-account.json
+  - gcloud beta auth application-default activate-service-account --key-file service-account.json
   - gcloud config set project k8s-ddy-243519
   - gcloud config set compute/zone europe-north1-a
   - gcloud container clusters get-credentials task-management-cluster
