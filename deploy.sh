@@ -10,7 +10,7 @@ docker push ddydeveloper/task-management-client:$SHA
 docker push ddydeveloper/task-management-server:$SHA
 docker push ddydeveloper/task-management-mssql:$SHA
 
-# Apply command separately to keep data in secure way
+# Apply command separately to keep data in a secure way
 kubectl delete secret mssql-secret
 kubectl create secret generic mssql-secret --from-literal SA_PASSWORD="P@ssw0rd" --from-literal TASKS_DB="Server=mssql-cluster-ip-service;DataBase=Tasks;User Id=sa;Password=P@ssw0rd;Connection Timeout=30;"
 

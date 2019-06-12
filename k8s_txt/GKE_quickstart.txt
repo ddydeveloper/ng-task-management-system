@@ -1,17 +1,21 @@
 1. Create cluster
 
-2. Create service-account 
+2. Create service-account, download the file and rename to "service-account.json"
 
 3. Encrypt service-account with ruby image
 	- docker run -it -v ${pwd}:/app ruby:2.3 sh
 	- gem install travis
 	- travis login
-	- travis encrypt-file service-account.json -r ddydeveloper/multi-k8s
+	- travis encrypt-file service-account.json -r ddydeveloper/ng-task-management-system
+		# ddydeveloper/ng-task-management-system - your repository
 	
 4. Configure GKE console:
 	- gcloud config set project k8s-ddy
-	- gcloud config set compute/zone europe-north1-a	
+		# k8s-ddy - your project id
+	- gcloud config set compute/zone europe-north1-a
+		# rope-north1-a - your cluster zone	
 	- gcloud container clusters get-credentials task-management-cluster
+		# task-management-cluster - your cluster name
 	
 5. Set up helm for GKE
 	- follow quick start guide "From script" section:
