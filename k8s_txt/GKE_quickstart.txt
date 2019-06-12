@@ -6,6 +6,7 @@
 	- docker run -it -v ${pwd}:/app ruby:2.3 sh
 	- gem install travis
 	- travis login
+	- cd app
 	- travis encrypt-file service-account.json -r ddydeveloper/ng-task-management-system
 		# ddydeveloper/ng-task-management-system - your repository
 	
