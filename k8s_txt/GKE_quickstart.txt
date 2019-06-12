@@ -11,8 +11,8 @@
 		# ddydeveloper/ng-task-management-system - your repository
 	
 4. Configure GKE console:
-	- gcloud config set project k8s-ddy
-		# k8s-ddy - your project id
+	- gcloud config set project k8s-ddy-243519
+		# k8s-ddy-243519 - your project id
 	- gcloud config set compute/zone europe-north1-a
 		# rope-north1-a - your cluster zone	
 	- gcloud container clusters get-credentials task-management-cluster
