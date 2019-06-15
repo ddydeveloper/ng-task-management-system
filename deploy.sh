@@ -21,4 +21,4 @@ kubectl set image deployments/server-deployment server=ddydeveloper/task-managem
 
 # Database initialize single instance, set up availability level to replicate
 kubectl apply -f k8s_db
-kubectl set image deployments/mssql-deployment  mssql=ddydeveloper/task-management-mssql:$SHA
+# kubectl set image deployments/mssql-deployment  mssql=ddydeveloper/task-management-mssql:$SHA
