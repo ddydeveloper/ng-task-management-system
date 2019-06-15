@@ -6,7 +6,7 @@ docker push ddydeveloper/task-management-client:latest
 docker push ddydeveloper/task-management-server:latest
 docker push ddydeveloper/task-management-mssql:latest
 
-docker push ddydeveloper/task-management-client:$SHA 
+docker push ddydeveloper/task-management-client:$SHA
 docker push ddydeveloper/task-management-server:$SHA
 docker push ddydeveloper/task-management-mssql:$SHA
 
