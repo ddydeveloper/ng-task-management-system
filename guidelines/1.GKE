@@ -1,0 +1,8 @@
+# task-management-243511 - your project id
+- gcloud config set project task-management-243511
+
+# europe-north1-a - your cluster zone	
+- gcloud config set compute/zone europe-north1-a
+
+# tm-cluster - your cluster name
+- gcloud container clusters get-credentials tm-cluster

@@ -8,29 +8,29 @@ function getDateDiffInSeconds(start: Date, end: Date): number {
 function secondsToText(value: number): string {
     let count = 60 * 60 * 24 * 7;
     if (value > count) {
-        return `More than ${Math.floor(value / count)} weeks`;
+        return `${Math.floor(value / count)} weeks to complete`;
     }
 
     if (value < -count) {
-        return `More than ${Math.abs(Math.floor(value / count))} weeks expired`;
+        return `${Math.abs(Math.floor(value / count))} weeks expired`;
     }
 
     count /= 7;
     if (value > count) {
-        return `More than ${Math.floor(value / count)} days`;
+        return `${Math.floor(value / count)} days to complete`;
     }
 
     if (value < -count) {
-        return `More than ${Math.abs(Math.floor(value / count))} days expired`;
+        return `${Math.abs(Math.floor(value / count))} days expired`;
     }
 
     count /= 24;
     if (value > count) {
-        return `More than ${Math.floor(value / count)} hours`;
+        return `${Math.floor(value / count)} hours to complete`;
     }
 
     if (value < -count) {
-        return `More than ${Math.abs(Math.floor(value / count))} hours expired`;
+        return `${Math.abs(Math.floor(value / count))} hours expired`;
     }
 
     count /= 60;
