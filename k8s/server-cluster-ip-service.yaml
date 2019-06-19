@@ -8,4 +8,4 @@ spec:
     component: server
   ports:
     - port: 5001
-      targetPort: 5000
+      targetPort: 5005
