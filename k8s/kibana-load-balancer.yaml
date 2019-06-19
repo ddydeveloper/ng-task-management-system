@@ -14,4 +14,4 @@ spec:
   selector:
     app: kibana
     release: kibana
-  type: LoadBalancer
+  type: LoadBalancer 
