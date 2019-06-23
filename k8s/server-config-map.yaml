@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: server-config-map
+data:
+  elastic: http://elasticsearch-client.logging.svc.cluster.local
+  redis: redis-cluster-ip-service

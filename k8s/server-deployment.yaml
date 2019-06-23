@@ -22,6 +22,12 @@ spec:
                   name: mssql-secret
                   key: TASKS_DB
             - name: ConnectionStrings__ElasticSearch
-              value: http://elasticsearch-client.logging.svc.cluster.local
+              valueFrom:
+                configMapKeyRef:
+                  name: server-config-map
+                  key: elastic
             - name: ConnectionStrings__Redis
-              value: redis-cluster-ip-service
+              valueFrom:
+                configMapKeyRef:
+                  name: server-config-map
+                  key: redis
