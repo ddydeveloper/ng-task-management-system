@@ -24,19 +24,19 @@ namespace api_task_management.Controllers
         [HttpGet]
         public async Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take, string orderBy, bool isDesc)
         {
-            return await _tasksService.GetTasksAsync(status, skip, take, orderBy, isDesc);
+            return await _tasksService.GetTasks(status, skip, take, orderBy, isDesc);
         }
 
         [HttpGet("{id}/number")]
         public async Task<int?> GetTaskRowNumberAsync(int id, int? status)
         {
-            return await _tasksService.GetTaskRowNumberAsync(id, status);
+            return await _tasksService.GetTaskRowNumber(id, status);
         }
 
         [HttpPost]
         public async Task<TaskDto> CreateTaskAsync(TaskDto dto)
         {
-            dto = await _tasksService.CreateTaskAsync(dto);
+            dto = await _tasksService.CreateTask(dto);
             await _hubContext.Clients.All.TaskCreated(dto);
 
             return dto;
@@ -45,7 +45,7 @@ namespace api_task_management.Controllers
         [HttpPut("{id}")]
         public async Task<TaskDto> UpdateTaskAsync(int id, TaskDto dto)
         {
-            dto = await _tasksService.UpdateTaskAsync(dto);
+            dto = await _tasksService.UpdateTask(dto);
             await _hubContext.Clients.All.TaskUpdated(dto);
 
             return dto;

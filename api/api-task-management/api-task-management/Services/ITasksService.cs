@@ -5,12 +5,12 @@ namespace api_task_management.Services
 {
     public interface ITasksService
     {
-        Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take, string orderBy, bool isDesc);
+        Task<TaskSetDto> GetTasks(int? status, int skip, int take, string orderBy, bool isDesc);
 
-        Task<int?> GetTaskRowNumberAsync(int taskId, int? status);
+        Task<int?> GetTaskRowNumber(int taskId, int? status);
 
-        Task<TaskDto> CreateTaskAsync(TaskDto dto);
+        Task<TaskDto> CreateTask(TaskDto dto);
 
-        Task<TaskDto> UpdateTaskAsync(TaskDto dto);
+        Task<TaskDto> UpdateTask(TaskDto dto);
     }
 }

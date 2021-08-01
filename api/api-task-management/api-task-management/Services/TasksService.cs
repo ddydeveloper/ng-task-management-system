@@ -18,7 +18,7 @@ namespace api_task_management.Services
             _connectionStrings = connectionStrings.Value;
         }
 
-        public async Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take, string orderBy, bool isDesc)
+        public async Task<TaskSetDto> GetTasks(int? status, int skip, int take, string orderBy, bool isDesc)
         {
             IEnumerable<TaskDto> tasks;
             int totalCount;
@@ -57,7 +57,7 @@ namespace api_task_management.Services
             return new TaskSetDto {Tasks = tasks, TotalCount = totalCount};
         }
 
-        public async Task<int?> GetTaskRowNumberAsync(int taskId, int? status)
+        public async Task<int?> GetTaskRowNumber(int taskId, int? status)
         {
             int? result;
             using (var conn = new SqlConnection(_connectionStrings.TasksDb))
@@ -98,7 +98,7 @@ namespace api_task_management.Services
             return result;
         }
 
-        public async Task<TaskDto> CreateTaskAsync(TaskDto dto)
+        public async Task<TaskDto> CreateTask(TaskDto dto)
         {
             int createdId;
             using (var conn = new SqlConnection(_connectionStrings.TasksDb))
@@ -116,7 +116,7 @@ namespace api_task_management.Services
             return dto;
         }
 
-        public async Task<TaskDto> UpdateTaskAsync(TaskDto dto)
+        public async Task<TaskDto> UpdateTask(TaskDto dto)
         {
             using (var conn = new SqlConnection(_connectionStrings.TasksDb))
             {
