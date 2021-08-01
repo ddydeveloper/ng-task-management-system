@@ -57,7 +57,7 @@ namespace api_task_management.Services
             return new TaskSetDto {Tasks = tasks, TotalCount = totalCount};
         }
 
-        public async Task<int?> GetTaskRowNumber(int taskId, int? status)
+        public async Task<int?> GetTaskRowNumberAsync(int taskId, int? status)
         {
             int? result;
             using (var conn = new SqlConnection(_connectionStrings.TasksDb))

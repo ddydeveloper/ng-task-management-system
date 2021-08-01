@@ -30,7 +30,7 @@ namespace api_task_management.Controllers
         [HttpGet("{id}/number")]
         public async Task<int?> GetTaskRowNumberAsync(int id, int? status)
         {
-            return await _tasksService.GetTaskRowNumber(id, status);
+            return await _tasksService.GetTaskRowNumberAsync(id, status);
         }
 
         [HttpPost]

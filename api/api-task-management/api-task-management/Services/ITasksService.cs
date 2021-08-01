@@ -7,7 +7,7 @@ namespace api_task_management.Services
     {
         Task<TaskSetDto> GetTasksAsync(int? status, int skip, int take, string orderBy, bool isDesc);
 
-        Task<int?> GetTaskRowNumber(int taskId, int? status);
+        Task<int?> GetTaskRowNumberAsync(int taskId, int? status);
 
         Task<TaskDto> CreateTaskAsync(TaskDto dto);
 
