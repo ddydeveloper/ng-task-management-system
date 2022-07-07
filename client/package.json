@@ -23,7 +23,7 @@
     "@aspnet/signalr": "^1.1.0",
     "core-js": "^2.5.4",
     "enum-values": "^1.2.1",
-    "moment": "^2.23.0",
+    "moment": "^2.29.4",
     "primeflex": "^1.0.0-rc.1",
     "primeicons": "^1.0.0",
     "primeng": "^7.0.4",
